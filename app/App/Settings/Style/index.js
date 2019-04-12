@@ -421,8 +421,10 @@ class SettingsStyle extends Component {
               label="Sample Address"
             />
             <AddressStyleNote>
-              <Icon icon={warningIcon} spaceRight />
-              <span className="v-align">This is your Default Address</span>
+              <Icon icon={warningIcon} className="space-right" />
+              <span className="v-align">
+                This is your Default Address
+              </span>
             </AddressStyleNote>
           </div>
         </SettingsField>
