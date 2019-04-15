@@ -1,6 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import * as ReactRouterDOM from 'react-router-dom';
+import * as connectedReactRouter from 'connected-react-router';
+import * as ReactRouter from 'react-router';
 import * as Redux from 'redux';
 import * as ReactRedux from 'react-redux';
 import createCache from '@emotion/cache';
@@ -29,6 +31,8 @@ global.NEXUS = {
     React,
     ReactDOM,
     ReactRouterDOM,
+    connectedReactRouter,
+    ReactRouter,
     Redux,
     ReactRedux,
     emotion: { core, styled, theming, createCache },
