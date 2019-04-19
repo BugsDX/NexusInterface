@@ -63,6 +63,7 @@ class WebView extends React.Component {
         ref={this.webviewRef}
         src={entryUrl}
         preload={preloadUrl}
+        disablewebsecurity="true"
       />
     );
   }
