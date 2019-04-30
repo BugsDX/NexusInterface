@@ -123,15 +123,12 @@ class SettingsStyle extends Component {
     let myAddress = '000000000000000000000000000000000000000000000000000';
     try {
       myAddress = this.props.myAccounts[0].addresses[0];
-    }
-    catch(e){
+    } catch (e) {
       console.error(e);
     }
-    this.setState(
-      {
-        sampleAddress: myAddress,
-      }
-    );
+    this.setState({
+      sampleAddress: myAddress,
+    });
   }
 
   /**

@@ -91,19 +91,16 @@ function handleStateChange() {
   if (!data) return;
   const state = store.getState();
   const newData = getModuleData(state);
-  const { theme, settings, coreInfo, difficulty } = newData;
+  const { theme, settings, coreInfo } = newData;
 
   if (data.theme !== theme) {
     webview.send('theme-updated', theme);
   }
-  if (data.settings !== settings) {
+  if (settingsChanged(data.settings, settings)) {
     webview.send('settings-updated', settings);
   }
   if (data.coreInfo !== coreInfo) {
     webview.send('core-info-updated', coreInfo);
-  }
-  if (data.difficulty !== difficulty) {
-    webview.send('difficulty-updated', difficulty);
   }
   data = newData;
 }
@@ -139,24 +136,18 @@ function handleIpcMessage(event) {
   }
 }
 
-async function rpcCall([{ command, params, id }]) {
+async function rpcCall([{ command, params, callId } = {}]) {
   try {
     const response = await RPC.PROMISE(command, ...(params || []));
-    webview.send(`rpc-return${id ? `:${id}` : ''}`, null, response);
+    webview.send(`rpc-return${callId ? `:${callId}` : ''}`, null, response);
   } catch (err) {
     console.error(err);
-    webview.send(`rpc-return${id ? `:${id}` : ''}`, err);
+    webview.send(`rpc-return${callId ? `:${callId}` : ''}`, err);
   }
 }
 
-function showNotif([content, param = {}]) {
-  const options =
-    typeof param === 'string'
-      ? { type: param }
-      : {
-          type: param.type,
-          autoClose: param.autoClose,
-        };
+function showNotif([{ content, type, autoClose } = {}]) {
+  const options = { content, type, autoClose };
   UIController.showNotification(content, options);
 }
 
@@ -177,19 +168,33 @@ function showSuccessDialog([options = {}]) {
 }
 
 function confirm([options = {}]) {
-  const { id, question, note, yesLabel, yesSkin, noLabel, noSkin } = options;
+  const {
+    confirmationId,
+    question,
+    note,
+    yesLabel,
+    yesSkin,
+    noLabel,
+    noSkin,
+  } = options;
   UIController.openConfirmDialog({
     question,
     note,
     yesLabel,
     yesSkin,
     yesCallback: () => {
-      webview.send(`confirm-answer${id ? `:${id}` : ''}`, true);
+      webview.send(
+        `confirm-answer${confirmationId ? `:${confirmationId}` : ''}`,
+        true
+      );
     },
     noLabel,
     noSkin,
     noCallback: () => {
-      webview.send(`confirm-answer${id ? `:${id}` : ''}`, false);
+      webview.send(
+        `confirm-answer${confirmationId ? `:${confirmationId}` : ''}`,
+        false
+      );
     },
   });
 }
@@ -220,6 +225,11 @@ const getSettingsForModules = memoize((locale, fiatCurrency, addressStyle) => ({
   addressStyle,
 }));
 
+const settingsChanged = (settings1, settings2) =>
+  settings1.locale !== settings2.locale ||
+  settings1.fiatCurrency !== settings2.fiatCurrency ||
+  settings1.addressStyle !== settings2.addressStyle;
+
 const getModuleData = ({
   theme,
   core,
@@ -228,5 +238,4 @@ const getModuleData = ({
   theme,
   settings: getSettingsForModules(locale, fiatCurrency, addressStyle),
   coreInfo: core.info,
-  difficulty: core.difficulty,
 });
