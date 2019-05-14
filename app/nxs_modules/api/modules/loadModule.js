@@ -9,6 +9,7 @@ import {
   isRepoOnline,
   isRepoVerified,
   isAuthorPartOfOrg,
+  getModuleHash,
 } from './repo';
 
 const ajv = new Ajv();
@@ -136,10 +137,12 @@ export async function loadModuleFromDir(
       }
     }
 
+    module.hash = await getModuleHash(module, dirPath);
+
     // Check the repository info and verification
     const repoInfo = await getRepoInfo(dirPath);
     if (repoInfo) {
-      const [repoOnline, repoVerified, nexusRepo] = await Promise.all([
+      const [repoOnline, repoVerified, repoFromNexus] = await Promise.all([
         isRepoOnline(repoInfo),
         isRepoVerified(repoInfo, module, dirPath),
         isAuthorPartOfOrg(repoInfo),
@@ -147,7 +150,7 @@ export async function loadModuleFromDir(
       Object.assign(module, repoInfo.data, {
         repoOnline,
         repoVerified,
-        nexusRepo,
+        isFromNexus: repoFromNexus && repoVerified,
       });
     }
 

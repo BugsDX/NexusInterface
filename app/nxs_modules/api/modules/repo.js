@@ -67,13 +67,18 @@ function normalizeFile(path) {
 }
 
 /**
+ * Exports
+ * =============================================================================
+ */
+
+/**
  * Get the module hash, calculated by hashing all the files that it uses, concatenated
  *
  * @param {*} module
  * @param {*} dirPath
  * @returns
  */
-async function getModuleHash(module, dirPath) {
+export async function getModuleHash(module, dirPath) {
   return new Promise((resolve, reject) => {
     try {
       const nxsPackagePath = join(dirPath, 'nxs_package.json');
@@ -95,11 +100,6 @@ async function getModuleHash(module, dirPath) {
     }
   });
 }
-
-/**
- * Exports
- * =============================================================================
- */
 
 /**
  * Returns the repository info including the Nexus signature if repo_info.json file does exist and is valid
@@ -137,6 +137,8 @@ export async function isAuthorPartOfOrg(repoInfo) {
   const { host, owner, repo, commit } = repoInfo.data.repository;
   if (!host || !owner || !repo || !commit) return false;
 
+  if (owner === 'Nexusoft') return true;
+
   try {
     const apiUrls = {
       'github.com': `https://api.github.com/users/${owner}/orgs`,
@@ -144,10 +146,8 @@ export async function isAuthorPartOfOrg(repoInfo) {
     const url = apiUrls[host];
     const response = await axios.get(url);
     const listOfOrgs = JSON.parse(response.request.response);
-    const partOfNexus = listOfOrgs.filter(e => {
-      return e.login === 'Nexusoft';
-    });
-    return !!partOfNexus && partOfNexus.length != 0;
+    const partOfNexus = listOfOrgs.find(e => e.login === 'Nexusoft');
+    return !!partOfNexus;
   } catch (err) {
     console.error(err);
     return false;
@@ -193,7 +193,7 @@ export async function isRepoVerified(repoInfo, module, dirPath) {
 
   // Check hash of module files matching
   try {
-    const hash = await getModuleHash(module, dirPath);
+    const hash = module.hash || (await getModuleHash(module, dirPath));
     if (hash !== data.moduleHash) return false;
 
     // Check signature

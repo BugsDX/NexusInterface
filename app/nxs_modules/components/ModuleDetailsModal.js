@@ -63,6 +63,11 @@ const Field = ({ label, children }) => (
   </Row>
 );
 
+const CheckMark = styled.span({
+  cursor: 'default',
+  userSelect: 'none',
+});
+
 /**
  * Module details modal, for viewing details of both installed modules
  * and modules being installed
@@ -79,7 +84,7 @@ class ModuleDetailsModal extends React.Component {
   confirmDelete = () => {
     UIController.openConfirmDialog({
       question: `Delete ${this.props.module.displayName}?`,
-      yesCallback: async () => {
+      callbackYes: async () => {
         const moduleDir = join(
           config.GetModulesDir(),
           this.props.module.dirName
@@ -102,16 +107,17 @@ class ModuleDetailsModal extends React.Component {
     const repoUrl = module.repository
       ? `https://${host}/${owner}/${repo}/tree/${commit}`
       : null;
-    const isNexusOrg = module.nexusRepo;
     return (
       <Modal>
         <Modal.Header className="relative">
           Module Details
-          <DeleteModule>
-            <DeleteButton skin="plain" onClick={this.confirmDelete}>
-              <Icon icon={trashIcon} />
-            </DeleteButton>
-          </DeleteModule>
+          {!forInstall && (
+            <DeleteModule>
+              <DeleteButton skin="plain" onClick={this.confirmDelete}>
+                <Icon icon={trashIcon} />
+              </DeleteButton>
+            </DeleteModule>
+          )}
         </Modal.Header>
         <Modal.Body>
           <Field label="Module name">{module.name}</Field>
@@ -149,7 +155,6 @@ class ModuleDetailsModal extends React.Component {
                     </ExternalLink>
                   </span>
                 )}
-                {isNexusOrg ? ' ✅' : null}
               </div>
             ) : (
               <span className="dim">No information</span>
@@ -164,6 +169,13 @@ class ModuleDetailsModal extends React.Component {
                     <Icon icon={linkIcon} className="space-left" />
                   </ExternalLink>
                 </Tooltip.Trigger>
+
+                {module.isFromNexus && (
+                  <Tooltip.Trigger tooltip="This module is developed by Nexus">
+                    <CheckMark>&nbsp;&nbsp;✔</CheckMark>
+                  </Tooltip.Trigger>
+                )}
+
                 {!module.repoOnline && (
                   <div className="error">
                     <Icon icon={warningIcon} />
@@ -187,6 +199,13 @@ class ModuleDetailsModal extends React.Component {
                 <Icon icon={warningIcon} />
                 <span className="v-align space-left">No information</span>
               </div>
+            )}
+          </Field>
+          <Field label="Module hash">
+            {module.hash ? (
+              <span className="monospace">{module.hash}</span>
+            ) : (
+              <span className="dim">Not available</span>
             )}
           </Field>
         </Modal.Body>
@@ -257,7 +276,7 @@ class Installer extends React.Component {
     return (
       <Modal.Footer>
         <InstallerWrapper>
-          {!module.invalid && !module.nexusRepo && (
+          {!module.invalid && !module.isFromNexus && (
             <InstallerWarning>
               Warning: This module is written by a third party, Nexus is NOT
               responsible for its quality or legitimacy. Please make sure to do

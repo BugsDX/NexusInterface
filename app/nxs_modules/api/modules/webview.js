@@ -1,4 +1,5 @@
 import memoize from 'memoize-one';
+import axios from 'axios';
 
 import store from 'store';
 import { updateModuleState } from 'actions/moduleActionCreators';
@@ -112,6 +113,9 @@ function handleStateChange() {
 
 function handleIpcMessage(event) {
   switch (event.channel) {
+    case 'proxy-request':
+      proxyRequest(event.args);
+      break;
     case 'rpc-call':
       rpcCall(event.args);
       break;
@@ -136,7 +140,34 @@ function handleIpcMessage(event) {
   }
 }
 
-async function rpcCall([{ command, params, callId } = {}]) {
+async function proxyRequest([url, options, requestId]) {
+  try {
+    const lUrl = url.toLowerCase();
+    if (!lUrl.startsWith('http://') && !lUrl.startsWith('https://')) {
+      throw 'Proxy request must be in HTTP or HTTPS protocol';
+    }
+    if (options) {
+      // disallow baseURL and url options, url must be absolute
+      delete options.baseURL;
+      delete options.url;
+    }
+
+    const response = await axios(url, options);
+    webview.send(
+      `proxy-response${requestId ? `:${requestId}` : ''}`,
+      null,
+      response
+    );
+  } catch (err) {
+    console.error(err);
+    webview.send(
+      `proxy-response${requestId ? `:${requestId}` : ''}`,
+      err.toString ? err.toString() : err
+    );
+  }
+}
+
+async function rpcCall([command, params, callId]) {
   try {
     const response = await RPC.PROMISE(command, ...(params || []));
     webview.send(`rpc-return${callId ? `:${callId}` : ''}`, null, response);
@@ -146,9 +177,9 @@ async function rpcCall([{ command, params, callId } = {}]) {
   }
 }
 
-function showNotif([{ content, type, autoClose } = {}]) {
-  const options = { content, type, autoClose };
-  UIController.showNotification(content, options);
+function showNotif([options = {}]) {
+  const { content, type, autoClose } = options;
+  UIController.showNotification(content, { content, type, autoClose });
 }
 
 function showErrorDialog([options = {}]) {
@@ -172,25 +203,25 @@ function confirm([options = {}]) {
     confirmationId,
     question,
     note,
-    yesLabel,
-    yesSkin,
-    noLabel,
-    noSkin,
+    labelYes,
+    skinYes,
+    labelNo,
+    skinNo,
   } = options;
   UIController.openConfirmDialog({
     question,
     note,
-    yesLabel,
-    yesSkin,
-    yesCallback: () => {
+    labelYes,
+    skinYes,
+    callbackYes: () => {
       webview.send(
         `confirm-answer${confirmationId ? `:${confirmationId}` : ''}`,
         true
       );
     },
-    noLabel,
-    noSkin,
-    noCallback: () => {
+    labelNo,
+    skinNo,
+    callbackNo: () => {
       webview.send(
         `confirm-answer${confirmationId ? `:${confirmationId}` : ''}`,
         false
