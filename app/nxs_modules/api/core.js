@@ -251,6 +251,7 @@ export default class Core {
           '-fastsync',
           '-rpcthreads=4',
           '-beta',
+          '-indexheight',
           `-verbose=${this.verbose}`,
           `-rpcallowip=${this.ip}`,
         ];
