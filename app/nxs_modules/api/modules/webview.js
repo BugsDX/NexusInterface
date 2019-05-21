@@ -1,11 +1,52 @@
 import memoize from 'memoize-one';
 import axios from 'axios';
+import { reset, initialize } from 'redux-form';
 
-import store from 'store';
+import store, { history } from 'store';
 import { updateModuleState } from 'actions/moduleActionCreators';
 import UIController from 'components/UIController';
 import * as RPC from 'scripts/rpc';
 import { readModuleStorage, writeModuleStorage } from './storage';
+
+const cmdWhitelist = [
+  'checkwallet',
+  'getaccount',
+  'getaccountaddress',
+  'getaddressesbyaccount',
+  'getbalance',
+  'getblock',
+  'getblockcount',
+  'getblockhash',
+  'getblocknumber',
+  'getconnectioncount',
+  'getdifficulty',
+  'getinfo',
+  'getmininginfo',
+  'getmoneysupply',
+  'getnetworkhashps',
+  'getnetworkpps',
+  'getnetworktrustkeys',
+  'getnewaddress',
+  'getpeerinfo',
+  'getrawtransaction',
+  'getreceivedbyaccount',
+  'getreceivedbyaddress',
+  'getsupplyrates',
+  'gettransaction',
+  'help',
+  'isorphan',
+  'listaccounts',
+  'listaddresses',
+  'listreceivedbyaccount',
+  'listreceivedbyaddress',
+  'listsinceblock',
+  'listtransactions',
+  'listtrustkeys',
+  'listunspent',
+  'unspentbalance',
+  'validateaddress',
+  'verifymessage',
+];
 
 let webview = null;
 let module = null;
@@ -113,6 +154,9 @@ function handleStateChange() {
 
 function handleIpcMessage(event) {
   switch (event.channel) {
+    case 'send-nxs':
+      sendNXS(event.args);
+      break;
     case 'proxy-request':
       proxyRequest(event.args);
       break;
@@ -138,6 +182,24 @@ function handleIpcMessage(event) {
       updateStorage(event.args);
       break;
   }
+}
+
+function sendNXS([recipients, message]) {
+  if (!Array.isArray(recipients)) return;
+
+  store.dispatch(
+    initialize('sendNXS', {
+      sendFrom: null,
+      recipients: recipients.map(r => ({
+        address: `${r.address}`,
+        amount: parseFloat(r.amount) || 0,
+        fiatAmount: '',
+      })),
+      message: message,
+    })
+  );
+  store.dispatch(reset('sendNXS'));
+  history.push('/SendPage');
 }
 
 async function proxyRequest([url, options, requestId]) {
@@ -169,6 +231,10 @@ async function proxyRequest([url, options, requestId]) {
 
 async function rpcCall([command, params, callId]) {
   try {
+    if (!cmdWhitelist.includes(command)) {
+      throw 'Invalid command';
+    }
+
     const response = await RPC.PROMISE(command, ...(params || []));
     webview.send(`rpc-return${callId ? `:${callId}` : ''}`, null, response);
   } catch (err) {
@@ -198,22 +264,18 @@ function showSuccessDialog([options = {}]) {
   });
 }
 
-function confirm([options = {}]) {
-  const {
-    confirmationId,
-    question,
-    note,
-    labelYes,
-    skinYes,
-    labelNo,
-    skinNo,
-  } = options;
+function confirm([options = {}, confirmationId]) {
+  const { question, note, labelYes, skinYes, labelNo, skinNo } = options;
   UIController.openConfirmDialog({
     question,
     note,
     labelYes,
     skinYes,
     callbackYes: () => {
+      console.log(
+        'yes',
+        `confirm-answer${confirmationId ? `:${confirmationId}` : ''}`
+      );
       webview.send(
         `confirm-answer${confirmationId ? `:${confirmationId}` : ''}`,
         true
