@@ -32,6 +32,7 @@ import Icon from 'components/Icon';
 import Tab from 'components/Tab';
 import FieldSet from 'components/FieldSet';
 import * as color from 'utils/color';
+import * as connectedReactRouter from 'connected-react-router';
 
 global.NEXUS = {
   specVersion: MODULE_SPEC_VERSION,
@@ -41,6 +42,7 @@ global.NEXUS = {
     ReactRouterDOM,
     Redux,
     ReactRedux,
+    connectedReactRouter,
     emotion: { core, styled, theming, createCache },
     victory,
   },
