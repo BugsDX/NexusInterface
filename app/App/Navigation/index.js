@@ -83,6 +83,29 @@ const ModuleNavItems = connect(
     .map(module => <ModuleNavItem key={module.name} module={module} />)
 );
 
+const TritiumNavItems = connect(
+  state => {
+    return {
+      settings: state.settings,
+    };
+  },
+  null,
+  null,
+  { pure: true }
+)(({ settings }) => {
+  console.log(settings);
+  if (settings.tritium) {
+    const tritiumPages = ['Login', 'Accounts', 'Assets', 'Contacts'];
+    return tritiumPages.map(e => {
+      return (
+        <NavItem key={e} icon={logoIcon} to={'/' + e}>
+          <Text id={'Footer.' + e} />
+        </NavItem>
+      );
+    });
+  } else return null;
+});
+
 const Navigation = () => (
   <Nav>
     <AboveNav>
@@ -94,19 +117,19 @@ const Navigation = () => (
         <Text id="Footer.Overview" />
       </NavItem>
 
-      <NavItem icon={sendIcon} to="/SendPage">
+      <NavItem icon={sendIcon} to="/Legacy/SendPage">
         <Text id="Footer.SendNXS" />
       </NavItem>
 
-      <NavItem icon={transactionsIcon} to="/Transactions">
+      <NavItem icon={transactionsIcon} to="/Legacy/Transactions">
         <Text id="Footer.Transactions" />
       </NavItem>
 
-      <NavItem icon={chartIcon} to="/Market">
+      <NavItem icon={chartIcon} to="/Legacy/Market">
         <Text id="Footer.MarketData" />
       </NavItem>
 
-      <NavItem icon={addressBookIcon} to="/AddressBook">
+      <NavItem icon={addressBookIcon} to="/Legacy/AddressBook">
         <Text id="Footer.AddressBook" />
       </NavItem>
 
@@ -117,16 +140,7 @@ const Navigation = () => (
       <NavItem icon={consoleIcon} to="/Terminal">
         <Text id="Footer.Console" />
       </NavItem>
-      {/* 
-      <NavItem icon={shapeshiftIcon} to="/Exchange">
-        <Text id="Footer.Exchange" />
-      </NavItem> */}
-
-      {/* <NavItem icon={trustListIcon} to="/List">
-        <Text id="Footer.Trust" />
-        &nbsp;
-        <Text id="Footer.List" />
-      </NavItem> */}
+      <TritiumNavItems />
 
       <ModuleNavItems />
     </NavBar>

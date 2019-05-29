@@ -12,20 +12,25 @@ import GlobalStyles from 'components/GlobalStyles';
 import Overview from './Overview';
 import Header from './Header';
 import Navigation from './Navigation';
-import SendPage from './SendPage';
-import Transactions from './Transactions';
-import Market from './Market';
-import AddressBook from './AddressBook';
-import BlockExplorer from './BlockExplorer';
+import SendPage from './Legacy/SendPage';
+import Transactions from './Legacy/Transactions';
+import Market from './Legacy/Market';
+import AddressBook from './Legacy/AddressBook';
 import Settings from './Settings';
 import Terminal from './Terminal';
-import StyleGuide from './StyleGuide';
+import StyleGuide from './Legacy/StyleGuide';
 import About from './About';
 import Modules from './Modules';
 // import Exchange from './Exchange';
 // import TrustList from './TrustList';
 import AppBackground from './AppBackground';
 import ThemeController from './ThemeController';
+
+//NEW TRITIUM
+import Login from './Login';
+import Accounts from './Accounts';
+import Assets from './Assets';
+import Contacts from './Contacts';
 
 const AppWrapper = styled.div({
   position: 'fixed',
@@ -76,31 +81,37 @@ export default class App extends Component {
                   <Main>
                     <Switch>
                       <Route exact path="/" component={Overview} />
-                      <Route exact path="/SendPage" component={SendPage} />
                       <Route
                         exact
-                        path="/Transactions"
+                        path="/Legacy/SendPage"
+                        component={SendPage}
+                      />
+                      <Route
+                        exact
+                        path="/Legacy/Transactions"
                         component={Transactions}
                       />
-                      <Route exact path="/Market" component={Market} />
+                      <Route exact path="/Legacy/Market" component={Market} />
                       <Route
                         exact
-                        path="/AddressBook"
+                        path="/Legacy/AddressBook"
                         component={AddressBook}
-                      />
-                      <Route
-                        exact
-                        path="/BlockExplorer"
-                        component={BlockExplorer}
                       />
                       <Route path="/Settings" component={Settings} />
                       <Route path="/Terminal" component={Terminal} />
-                      <Route exact path="/StyleGuide" component={StyleGuide} />
-                      {/* <Route path="/Exchange" component={Exchange} /> */}
-                      {/* <Route exact path="/List" component={TrustList} /> */}
+                      <Route
+                        exact
+                        path="/Legacy/StyleGuide"
+                        component={StyleGuide}
+                      />
 
                       <Route exact path="/About" component={About} />
                       <Route path="/Modules/:name" component={Modules} />
+                      {/*New Tritium Routes*/}
+                      <Route exact path="/Login" component={Login} />
+                      <Route exact path="/Assets" component={Assets} />
+                      <Route exact path="/Contacts" component={Contacts} />
+                      <Route exact path="/Accounts" component={Accounts} />
                     </Switch>
                   </Main>
                   <Navigation />

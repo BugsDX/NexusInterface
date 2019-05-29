@@ -257,6 +257,16 @@ class SettingsCore extends Component {
         <form onSubmit={handleSubmit}>
           <SettingsField
             connectLabel
+            label={<Text id="Settings.EnableTritium" />}
+            subLabel={<Text id="ToolTip.EnableTritium" />}
+          >
+            <Switch
+              checked={settings.tritium}
+              onChange={this.updateHandlers('tritium')}
+            />
+          </SettingsField>
+          <SettingsField
+            connectLabel
             label={<Text id="Settings.EnableMining" />}
             subLabel={<Text id="ToolTip.EnableMining" />}
           >
