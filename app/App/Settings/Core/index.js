@@ -221,10 +221,12 @@ class SettingsCore extends Component {
    * @memberof SettingsCore
    */
   returnFeeSetting = () => {
-    if (this.props.version.includes('Tritium')) {
-      return null;
-    } else {
-      return <FeeSetting />;
+    if (this.props.version) {
+      if (this.props.version.includes('Tritium')) {
+        return null;
+      } else {
+        return <FeeSetting />;
+      }
     }
   };
 
