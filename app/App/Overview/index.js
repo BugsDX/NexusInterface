@@ -15,7 +15,7 @@ import Tooltip from 'components/Tooltip';
 import ContextMenuBuilder from 'contextmenu';
 import { getDifficulty } from 'actions/coreActionCreators';
 import * as helpers from 'scripts/helper.js';
-import * as RPC from 'scripts/rpc';
+import * as Backend from 'scripts/backend-com';
 import { timing, consts, animations } from 'styles';
 import Globe from './Globe';
 
@@ -455,10 +455,8 @@ class Overview extends Component {
       } else {
         currencyValue = currencyValue.toFixed(2);
       }
-      return `${helpers.ReturnCurrencySymbol(
-        selectedCurrancyValue[0].name,
-        this.props.displayNXSvalues
-      ) + currencyValue}`;
+
+      return `${selectedCurrancyValue[0].name} ${currencyValue}`;
     } else {
       return '$0';
     }

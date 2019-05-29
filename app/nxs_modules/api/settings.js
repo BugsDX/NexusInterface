@@ -30,6 +30,7 @@ export const defaultSettings = {
   overviewDisplay: 'standard',
 
   // Core
+  tritium: false,
   enableMining: false,
   enableStaking: true,
   verboseLevel: 2,
