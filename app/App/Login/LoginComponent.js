@@ -8,6 +8,7 @@ import Modal from 'components/Modal';
 import Button from 'components/Button';
 import Panel from 'components/Panel';
 import { updateSettings } from 'actions/settingsActionCreators';
+import * as Backend from 'scripts/backend-com';
 
 const LicenseAgreementModalComponent = styled(Modal)({
   padding: '1px',
@@ -21,6 +22,7 @@ const LicenseAgreementModalComponent = styled(Modal)({
 )
 class LoginComponent extends React.Component {
   close = () => {
+    Backend.RunCommand('API', { api: 'system', verb: 'get', noun: 'info' }, []);
     this.closeModal();
   };
 
