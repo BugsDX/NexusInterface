@@ -199,7 +199,7 @@ function sendNXS([recipients, message]) {
     })
   );
   store.dispatch(reset('sendNXS'));
-  history.push('/SendPage');
+  history.push('/Legacy/SendPage');
 }
 
 async function proxyRequest([url, options, requestId]) {
@@ -235,7 +235,11 @@ async function rpcCall([command, params, callId]) {
       throw 'Invalid command';
     }
 
-    const response = await Backend.RunCommand('RPC', command, ...(params || []));
+    const response = await Backend.RunCommand(
+      'RPC',
+      command,
+      ...(params || [])
+    );
     webview.send(`rpc-return${callId ? `:${callId}` : ''}`, null, response);
   } catch (err) {
     console.error(err);
