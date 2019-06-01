@@ -10,6 +10,7 @@ export const PROMISE = (api, verb, noun, args) => {
       params: args,
     });
 
+    console.log(args);
     let ResponseObject = new XMLHttpRequest();
 
     ResponseObject.onload = () => {
@@ -28,7 +29,7 @@ export const PROMISE = (api, verb, noun, args) => {
       }
 
       let payload = JSON.parse(ResponseObject.response).result;
-
+      console.log(payload);
       resolve(payload);
     };
 

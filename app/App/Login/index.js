@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 // Internal
 import UIController from 'components/UIController';
 import LoginComponent from './LoginComponent';
+import CreateUserComponent from './CreateUserComponent';
 import { history } from 'store';
 
 import { updateSettings } from 'actions/settingsActionCreators';

@@ -21,7 +21,6 @@ const LicenseAgreementModalComponent = styled(Modal)({
 });
 
 const LoginFieldSet = styled(FieldSet)({
-  maxWidth: '50%',
   margin: '0 auto',
 });
 
@@ -86,7 +85,7 @@ const LoginFieldSet = styled(FieldSet)({
     }
   },
 })
-class LoginComponent extends React.Component {
+class CreateUserComponent extends React.Component {
   close = () => {
     Backend.RunCommand('API', { api: 'system', verb: 'get', noun: 'info' }, []);
     this.closeModal();
@@ -103,7 +102,7 @@ class LoginComponent extends React.Component {
         }}
         {...this.props}
       >
-        <Modal.Header>Tritium User</Modal.Header>
+        <Modal.Header>Tritium Login</Modal.Header>
         <Modal.Body>
           <Panel title={'Login'}>
             <form onSubmit={handleSubmit}>
@@ -185,4 +184,4 @@ class LoginComponent extends React.Component {
   }
 }
 
-export default LoginComponent;
+export default CreateUserComponent;
