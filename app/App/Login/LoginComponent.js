@@ -3,6 +3,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { reduxForm, Field } from 'redux-form';
 import styled from '@emotion/styled';
+import { history } from 'store';
 
 // Internal
 import Modal from 'components/Modal';
@@ -88,7 +89,17 @@ const LoginFieldSet = styled(FieldSet)({
 })
 class LoginComponent extends React.Component {
   close = () => {
-    Backend.RunCommand('API', { api: 'system', verb: 'get', noun: 'info' }, []);
+    history.push('/');
+    this.closeModal();
+  };
+
+  asddfgh = () => {
+    this.props.onCloseCreate();
+    this.closeModal();
+  };
+
+  legacyClose = () => {
+    this.props.onCloseLegacy();
     this.closeModal();
   };
 
@@ -145,6 +156,7 @@ class LoginComponent extends React.Component {
                     skin="primary"
                     type="submit"
                     wide
+                    onClick={this.asddfgh}
                     style={{ fontSize: 17, marginTop: '5px' }}
                   >
                     Create Account
@@ -170,7 +182,7 @@ class LoginComponent extends React.Component {
                   </Button>
                   <Button
                     skin="primary"
-                    onClick={this.close}
+                    onClick={this.legacyClose}
                     style={{ fontSize: 17, padding: '5px' }}
                   >
                     Legacy Mode

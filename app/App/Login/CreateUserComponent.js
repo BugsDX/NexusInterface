@@ -57,7 +57,7 @@ const LoginFieldSet = styled(FieldSet)({
     console.log(this);
     return Backend.RunCommand(
       'API',
-      { api: 'users', verb: 'login', noun: 'user' },
+      { api: 'users', verb: 'create', noun: 'user' },
       [{ username: username, password: password, pin: pin }]
     );
   },
@@ -87,7 +87,11 @@ const LoginFieldSet = styled(FieldSet)({
 })
 class CreateUserComponent extends React.Component {
   close = () => {
-    Backend.RunCommand('API', { api: 'system', verb: 'get', noun: 'info' }, []);
+    this.closeModal();
+  };
+
+  legacyClose = () => {
+    this.props.onCloseLegacy();
     this.closeModal();
   };
 
@@ -104,9 +108,9 @@ class CreateUserComponent extends React.Component {
       >
         <Modal.Header>Tritium Login</Modal.Header>
         <Modal.Body>
-          <Panel title={'Login'}>
+          <Panel title={'Create Account'}>
             <form onSubmit={handleSubmit}>
-              <LoginFieldSet legend="Login">
+              <LoginFieldSet legend="Create Account">
                 <FormField connectLabel label={<Text id="Settings.Username" />}>
                   <Field
                     component={TextField.RF}
@@ -123,7 +127,11 @@ class CreateUserComponent extends React.Component {
                     placeholder={'Password'}
                   />
                 </FormField>
-                <FormField connectLabel label={<Text id="Settings.Pin" />}>
+                <FormField
+                  connectLabel
+                  label={<Text id="Settings.Pin" />}
+                  subLable={'ASdasaddsa'}
+                >
                   <Field
                     component={TextField.RF}
                     name="pin"
@@ -132,14 +140,6 @@ class CreateUserComponent extends React.Component {
                   />
                 </FormField>
                 <div style={{ padding: '5px', paddingTop: '10px' }}>
-                  <Button
-                    skin="primary"
-                    type="submit"
-                    wide
-                    style={{ fontSize: 17, padding: '5px' }}
-                  >
-                    Login With Tritium
-                  </Button>
                   <Button
                     skin="primary"
                     type="submit"
@@ -162,14 +162,7 @@ class CreateUserComponent extends React.Component {
                 >
                   <Button
                     skin="primary"
-                    onClick={this.close}
-                    style={{ fontSize: 17, padding: '5px' }}
-                  >
-                    Forgot Password/Pin
-                  </Button>
-                  <Button
-                    skin="primary"
-                    onClick={this.close}
+                    onClick={this.legacyClose}
                     style={{ fontSize: 17, padding: '5px' }}
                   >
                     Legacy Mode
