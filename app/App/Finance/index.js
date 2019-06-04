@@ -4,6 +4,9 @@ import { connect } from 'react-redux';
 
 import Panel from 'components/Panel';
 import Text from 'components/Text';
+import Tooltip from 'components/Tooltip';
+import Button from 'components/Button';
+import Icon from 'components/Icon';
 import FinanceIcon from 'images/nxs-staking.sprite.svg';
 
 const mapStateToProps = state => {
@@ -18,9 +21,18 @@ class Finance extends Component {
         bodyScrollable={false}
         icon={FinanceIcon}
         title={<Text id="Finance.Title" />}
-      >
-        hjg
-      </Panel>
+        controls={
+          <Tooltip.Trigger tooltip={<Text id="Finance.Create" />}>
+            <Button
+              square
+              skin="primary"
+              onClick={() => console.log('createAccount')}
+            >
+              <Icon icon={FinanceIcon} />
+            </Button>
+          </Tooltip.Trigger>
+        }
+      />
     );
   }
 }
