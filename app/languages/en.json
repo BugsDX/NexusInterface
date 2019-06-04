@@ -566,5 +566,11 @@
   "Lang.French": "French",
   "Lang.Dutch": "Dutch",
 
-  "Common.UnknownError": "An unknown error occurred"
+  "Common.UnknownError": "An unknown error occurred",
+
+  "Finance.Title": "Finance",
+  "Finance.Accounts": "Accounts",
+  "Finance.Transaction": "Create Transaction",
+  "Finance.Create": "Create Account",
+  "Finance.Actions": "Actions"
 }

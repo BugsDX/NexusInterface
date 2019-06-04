@@ -24,6 +24,7 @@ import transactionsIcon from 'images/transaction.sprite.svg';
 import addressBookIcon from 'images/address-book.sprite.svg';
 import settingsIcon from 'images/settings.sprite.svg';
 import consoleIcon from 'images/console.sprite.svg';
+import FinanceIcon from 'images/nxs-staking.sprite.svg';
 // import shapeshiftIcon from 'images/shapeshift.sprite.svg';
 // import trustListIcon from 'images/trust-list.sprite.svg';
 
@@ -106,7 +107,16 @@ const TritiumNavItems = connect(
   } else return null;
 });
 
-const Navigation = () => (
+const Navigation = connect(
+  state => {
+    return {
+      settings: state.settings,
+    };
+  },
+  null,
+  null,
+  { pure: true }
+)(({ settings }) => (
   <Nav>
     <AboveNav>
       <HorizontalLine />
@@ -140,11 +150,30 @@ const Navigation = () => (
       <NavItem icon={consoleIcon} to="/Terminal">
         <Text id="Footer.Console" />
       </NavItem>
-      <TritiumNavItems />
+
+      {settings.tritium && (
+        <>
+          <NavItem icon={FinanceIcon} to="/Finance">
+            <Text id="Footer.Finance" />
+          </NavItem>
+          <NavItem icon={logoIcon} to="/Login">
+            <Text id="Footer.Login" />
+          </NavItem>
+          <NavItem icon={logoIcon} to="/Accounts">
+            <Text id="Footer.Accounts" />
+          </NavItem>
+          <NavItem icon={logoIcon} to="/Assets">
+            <Text id="Footer.Assets" />
+          </NavItem>
+          <NavItem icon={logoIcon} to="/Contacts">
+            <Text id="Footer.Contacts" />
+          </NavItem>
+        </>
+      )}
 
       <ModuleNavItems />
     </NavBar>
   </Nav>
-);
+));
 
 export default Navigation;
