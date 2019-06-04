@@ -54,6 +54,26 @@ class AppMenu {
     },
   };
 
+  tritiumSwitch = {
+    label: store.getState().settings.tritium
+      ? 'Switch to Legacy'
+      : 'Switch to Tritium',
+    click: () => {
+      const switchToTritium = !store.getState().settings.tritium;
+      updateSettings({ tritium: switchToTritium });
+      if (switchToTritium) {
+        history.push('/Login');
+      }
+    },
+  };
+
+  logOut = {
+    label: 'Logout',
+    click: () => {
+      //logout
+    },
+  };
+
   quitNexus = {
     label: 'Quit Nexus',
     accelerator: 'CmdOrCtrl+Q',
@@ -303,6 +323,9 @@ class AppMenu {
         this.backupWallet,
         this.viewBackups,
         this.separator,
+        this.tritiumSwitch,
+        this.logOut,
+        this.separator,
         this.downloadRecent,
       ],
     };
@@ -361,6 +384,9 @@ class AppMenu {
       submenu: [
         this.backupWallet,
         this.viewBackups,
+        this.separator,
+        this.tritiumSwitch,
+        this.logOut,
         this.separator,
         this.downloadRecent,
         this.separator,

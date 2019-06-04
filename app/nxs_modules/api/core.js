@@ -250,6 +250,7 @@ export default class Core {
           '-server',
           '-fastsync',
           '-rpcthreads=4',
+          '-connect=node4.nexusoft.io',
           '-beta',
           `-verbose=${this.verbose}`,
           `-rpcallowip=${this.ip}`,

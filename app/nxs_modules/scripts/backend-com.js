@@ -7,5 +7,10 @@ export const RunCommand = (protocol, command, params) => {
   //console.log(params);
   if (protocol === 'RPC') return RPC.PROMISE(command, params);
   else
-    return tritiumAPI.PROMISE(command.api, command.verb, command.noun, params);
+    return tritiumAPI.PROMISE(
+      command.api,
+      command.verb,
+      command.noun,
+      params[0]
+    );
 };

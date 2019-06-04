@@ -773,7 +773,7 @@ class Overview extends Component {
         <Stats left compact={!this.showingGlobe()}>
           <Stat
             as={connections ? Link : undefined}
-            to={connections ? '/Transactions' : undefined}
+            to={connections ? '/Legacy/Transactions' : undefined}
           >
             <div>
               <StatLabel>
@@ -793,7 +793,7 @@ class Overview extends Component {
 
           <Stat
             as={connections ? Link : undefined}
-            to={connections ? '/Transactions' : undefined}
+            to={connections ? '/Legacy/Transactions' : undefined}
           >
             <div>
               <StatLabel>
@@ -808,7 +808,7 @@ class Overview extends Component {
 
           <Stat
             as={connections ? Link : undefined}
-            to={connections ? '/Transactions' : undefined}
+            to={connections ? '/Legacy/Transactions' : undefined}
           >
             <div>
               <StatLabel>
@@ -821,7 +821,7 @@ class Overview extends Component {
 
           <Stat
             as={displayNXSvalues[0] ? Link : undefined}
-            to={displayNXSvalues[0] ? '/Market' : undefined}
+            to={displayNXSvalues[0] ? '/Legacy/Market' : undefined}
           >
             <div>
               <StatLabel>
@@ -840,7 +840,7 @@ class Overview extends Component {
 
           <Stat
             as={displayNXSvalues[0] ? Link : undefined}
-            to={displayNXSvalues[0] ? '/Market' : undefined}
+            to={displayNXSvalues[0] ? '/Legacy/Market' : undefined}
           >
             <div>
               <StatLabel>
@@ -859,7 +859,7 @@ class Overview extends Component {
 
           <Stat
             as={displayNXSvalues[0] ? Link : undefined}
-            to={displayNXSvalues[0] ? '/Market' : undefined}
+            to={displayNXSvalues[0] ? '/Legacy/Market' : undefined}
           >
             <div>
               <StatLabel>
