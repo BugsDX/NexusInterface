@@ -27,6 +27,7 @@ const initialState = {
   BootstrapModal: false,
   encryptionModalShown: false,
   webGLEnabled: false,
+  TEMPLoggedin: false,
 };
 
 export default (state = initialState, action) => {
@@ -210,6 +211,11 @@ export default (state = initialState, action) => {
       return {
         ...state,
         webGLEnabled: action.payload,
+      };
+    case TYPE.TEMP_LOG_IN:
+      return {
+        ...state,
+        TEMPLoggedin: action.payload,
       };
     default:
       return state;

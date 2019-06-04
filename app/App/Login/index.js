@@ -47,25 +47,28 @@ class LoginPage extends Component {
 
   componentDidMount() {
     //test
-    UIController.openModal(LogoutUserComponent, {
-      fullScreen: true,
-      onClose: () => this.switchTolegacy(),
-      onCloseLogout: () => this.openLoginModal(),
-      userInfo: {
-        genesisID:
-          'GEN ID KAJSDJAUFEJNFLKAMLSJDLKASMDLKASDKNADNLKASNKLDNASLdKSND',
-        sessionID: 'SESSION ASDASKDASKLD@299284121',
-      },
-    });
 
+    if (this.props.TEMPLoggedin) {
+      UIController.openModal(LogoutUserComponent, {
+        fullScreen: true,
+        onClose: () => this.switchTolegacy(),
+        onCloseLogout: () => this.openLoginModal(),
+        userInfo: {
+          genesisID:
+            'GEN ID KAJSDJAUFEJNFLKAMLSJDLKASMDLKASDKNADNLKASNKLDNASLdKSND',
+          sessionID: 'SESSION ASDASKDASKLD@299284121',
+        },
+      });
+    } else {
+      UIController.openModal(LoginComponent, {
+        fullScreen: true,
+        onClose: () => this.redirectToOverview(),
+        onCloseCreate: () => this.openCreateAUser(),
+        onCloseLegacy: () => this.switchTolegacy(),
+      });
+    }
     return null;
     this.props.turnOffTritium();
-    UIController.openModal(LoginComponent, {
-      fullScreen: true,
-      onClose: () => this.redirectToOverview(),
-      onCloseCreate: () => this.openCreateAUser(),
-      onCloseLegacy: () => this.switchTolegacy(),
-    });
 
     //if already logged in show logout modal
   }

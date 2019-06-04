@@ -30,6 +30,7 @@ const LoginFieldSet = styled(FieldSet)({
   null,
   dispatch => ({
     turnOnTritium: () => dispatch(updateSettings({ tritium: true })),
+    tempTurnOffLogIn: () => dispatch({ type: 'TEMP_LOG_IN', payload: true }),
   })
 )
 @reduxForm({
@@ -99,6 +100,7 @@ class LoginComponent extends React.Component {
   };
 
   legacyClose = () => {
+    this.props.tempTurnOffLogIn();
     this.props.onCloseLegacy();
     this.closeModal();
   };
@@ -152,44 +154,44 @@ class LoginComponent extends React.Component {
                   >
                     Login With Tritium
                   </Button>
-                  <Button
-                    skin="primary"
-                    type="submit"
-                    wide
-                    onClick={this.asddfgh}
-                    style={{ fontSize: 17, marginTop: '5px' }}
-                  >
-                    Create Account
-                  </Button>
-                </div>
-                <div
-                  style={{
-                    marginLeft: 'auto',
-                    marginRight: 'auto',
-                    display: 'grid',
-                    alignItems: 'center',
-                    gridTemplateColumns: 'auto auto',
-                    gridTemplateRows: 'auto',
-                    gridGap: '1em .5em',
-                  }}
-                >
-                  <Button
-                    skin="primary"
-                    onClick={this.close}
-                    style={{ fontSize: 17, padding: '5px' }}
-                  >
-                    Forgot Password/Pin
-                  </Button>
-                  <Button
-                    skin="primary"
-                    onClick={this.legacyClose}
-                    style={{ fontSize: 17, padding: '5px' }}
-                  >
-                    Legacy Mode
-                  </Button>
                 </div>
               </LoginFieldSet>
             </form>
+            <div
+              style={{
+                marginLeft: 'auto',
+                marginRight: 'auto',
+                display: 'grid',
+                alignItems: 'center',
+                gridTemplateColumns: 'auto auto',
+                gridTemplateRows: 'auto',
+                gridGap: '1em .5em',
+              }}
+            >
+              <Button
+                skin="primary"
+                type="submit"
+                wide
+                onClick={this.asddfgh}
+                style={{ fontSize: 17, marginTop: '5px' }}
+              >
+                Create Account
+              </Button>
+              <Button
+                skin="primary"
+                onClick={this.close}
+                style={{ fontSize: 17, padding: '5px' }}
+              >
+                Forgot Password/Pin
+              </Button>
+              <Button
+                skin="primary"
+                onClick={this.legacyClose}
+                style={{ fontSize: 17, padding: '5px' }}
+              >
+                Legacy Mode
+              </Button>
+            </div>
           </Panel>
         </Modal.Body>
       </LicenseAgreementModalComponent>

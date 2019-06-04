@@ -33,6 +33,7 @@ const LoginFieldSet = styled(FieldSet)({
   null,
   dispatch => ({
     turnOnTritium: () => dispatch(updateSettings({ tritium: true })),
+    tempTurnOffLogIn: () => dispatch({ type: 'TEMP_LOG_IN', payload: false }),
   })
 )
 class LogoutUserComponent extends React.Component {
@@ -49,6 +50,7 @@ class LogoutUserComponent extends React.Component {
     //Backend.RunCommand('api', { api: 'users', verb: 'logout', noun: 'user' }, [
     //  this.props.userInfo.sessionID,
     //]);
+    this.props.tempTurnOffLogIn();
     this.props.onCloseLogout();
     this.closeModal();
   };
