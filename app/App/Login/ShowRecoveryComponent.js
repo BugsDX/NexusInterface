@@ -32,10 +32,14 @@ const WordBox = styled.div({
   gridTemplateColumns: 'auto auto auto auto',
   gridTemplateRows: 'auto',
   gridGap: '1em .5em',
+  padding: '2em',
 });
 
 const Word = styled.div({
   background: 'black',
+  textAlign: 'center',
+  color: 'white',
+  fontWeight: 'bold',
 });
 
 class ShowRecoveryComponent extends React.Component {
@@ -81,6 +85,17 @@ class ShowRecoveryComponent extends React.Component {
 
   print() {}
 
+  askToContinue = () => {
+    UIController.openConfirmDialog({
+      question:
+        'Are you sure you want to continue? You will not be shown these words again.',
+      skinYes: 'danger',
+      callbackYes: () => {
+        this.props.onCloseBack();
+      },
+    });
+  };
+
   render() {
     return (
       <ShowRecModalComponent
@@ -95,14 +110,14 @@ class ShowRecoveryComponent extends React.Component {
         <Modal.Header>Recovery</Modal.Header>
         <Modal.Body>
           <Panel title={'Show Recovery'}>
-            <div> {'asdasdsa'}</div>
+            <div> {'Instructions'}</div>
             <WordBox>{this.returnWords()}</WordBox>
             <Button
               skin="primary"
-              onClick={() => this.props.onCloseBack()}
+              onClick={this.askToContinue}
               style={{ fontSize: 17, padding: '5px' }}
             >
-              Cancel
+              Continue
             </Button>
             <ReactToPrint
               trigger={() => (
@@ -115,8 +130,10 @@ class ShowRecoveryComponent extends React.Component {
                 </Button>
               )}
               content={() => this.printRef}
-            />
-            <div style={{ display: 'none' }}>
+            />{' '}
+            {/*In order to print we print the whole compoenent, this component is styled for printing and is hidden*/}
+            {/*Change style to display: hidden , must be done as a parent, if you display hidden PrintRecovery the print is blank*/}
+            <div style={{ display: 'block' }}>
               <PrintRecovery
                 twentyWords={this.state.twentyWords}
                 ref={e => (this.printRef = e)}
