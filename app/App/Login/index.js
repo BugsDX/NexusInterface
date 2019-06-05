@@ -23,7 +23,7 @@ const mapDispatchToProps = dispatch => ({
 
 class LoginPage extends Component {
   redirectToOverview() {
-    //history.push('/');
+    history.push('/');
   }
 
   openCreateAUser() {
@@ -31,11 +31,12 @@ class LoginPage extends Component {
       fullScreen: true,
       onClose: () => this.redirectToOverview(),
       onCloseLegacy: () => this.switchTolegacy(),
+      onCloseBack: () => this.openLoginModal(),
     });
   }
 
   switchTolegacy() {
-    history.push('/');
+    //history.push('/');
   }
 
   openLoginModal() {
@@ -43,7 +44,7 @@ class LoginPage extends Component {
       fullScreen: true,
       onClose: () => this.redirectToOverview(),
       onCloseCreate: () => this.openCreateAUser(),
-      onCloseLegacy: () => this.switchTolegacy(),
+      onCloseLegacy: () => this.redirectToOverview(),
       onCloseForgot: () => this.openForgot(),
       onCloseTest: () => this.openShowRecovery(),
     });
@@ -60,7 +61,7 @@ class LoginPage extends Component {
   openShowRecovery() {
     UIController.openModal(ShowRecoveryComponent, {
       fullScreen: true,
-      onClose: () => this.openLoginModal(),
+      onClose: () => this.switchTolegacy(),
       onCloseBack: () => this.openLoginModal(),
     });
   }

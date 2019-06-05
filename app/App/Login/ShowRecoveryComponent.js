@@ -92,6 +92,7 @@ class ShowRecoveryComponent extends React.Component {
       skinYes: 'danger',
       callbackYes: () => {
         this.props.onCloseBack();
+        this.closeModal();
       },
     });
   };

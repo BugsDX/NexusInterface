@@ -95,6 +95,11 @@ class CreateUserComponent extends React.Component {
     this.closeModal();
   };
 
+  goBackToLogin = () => {
+    this.props.onCloseBack();
+    this.closeModal();
+  };
+
   render() {
     const { handleSubmit } = this.props;
     console.log(this.props);
@@ -160,6 +165,13 @@ class CreateUserComponent extends React.Component {
                     gridGap: '1em .5em',
                   }}
                 >
+                  <Button
+                    skin="primary"
+                    onClick={this.goBackToLogin}
+                    style={{ fontSize: 17, padding: '5px' }}
+                  >
+                    Login
+                  </Button>
                   <Button
                     skin="primary"
                     onClick={this.legacyClose}
