@@ -16,6 +16,36 @@ import { updateSettings } from 'actions/settingsActionCreators';
 import * as Backend from 'scripts/backend-com';
 import UIController from 'components/UIController';
 
-class AttemptRecoveryComponent extends React.Component {}
+const AttemptRecModalComponent = styled(Modal)({
+  padding: '1px',
+});
+
+class AttemptRecoveryComponent extends React.Component {
+  render() {
+    return (
+      <AttemptRecModalComponent
+        fullScreen
+        assignClose={close => {
+          this.closeModal = close;
+        }}
+        {...this.props}
+      >
+        <Modal.Header>Recovery</Modal.Header>
+        <Modal.Body>
+          <Panel title={'Recovery'}>
+            <div> {'asdasdsa'}</div>
+            <Button
+              skin="primary"
+              onClick={() => this.props.onCloseBack()}
+              style={{ fontSize: 17, padding: '5px' }}
+            >
+              Cancel
+            </Button>
+          </Panel>
+        </Modal.Body>
+      </AttemptRecModalComponent>
+    );
+  }
+}
 
 export default AttemptRecoveryComponent;

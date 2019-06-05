@@ -8,6 +8,7 @@ import styled from '@emotion/styled';
 import Modal from 'components/Modal';
 import Button from 'components/Button';
 import Panel from 'components/Panel';
+import Tooltip from 'components/Tooltip';
 import Text from 'components/Text';
 import FormField from 'components/FormField';
 import TextField from 'components/TextField';
@@ -16,7 +17,7 @@ import { updateSettings } from 'actions/settingsActionCreators';
 import * as Backend from 'scripts/backend-com';
 import UIController from 'components/UIController';
 
-const LicenseAgreementModalComponent = styled(Modal)({
+const LogoutModalComponent = styled(Modal)({
   padding: '1px',
 });
 
@@ -60,7 +61,7 @@ class LogoutUserComponent extends React.Component {
     const { genesisID, sessionID } = userInfo;
     console.log(this.props);
     return (
-      <LicenseAgreementModalComponent
+      <LogoutModalComponent
         fullScreen
         assignClose={close => {
           this.closeModal = close;
@@ -69,7 +70,16 @@ class LogoutUserComponent extends React.Component {
       >
         <Modal.Header>Tritium</Modal.Header>
         <Modal.Body>
-          <Panel title={'Logout'}>
+          <Panel
+            title={'Logout'}
+            controls={
+              <Tooltip.Trigger tooltip={'Close'}>
+                <Button square skin="primary" onClick={this.close}>
+                  {'X'}
+                </Button>
+              </Tooltip.Trigger>
+            }
+          >
             <form onSubmit={handleSubmit}>
               <LoginFieldSet legend="Logout">
                 {'Are you sure you want to logout of this User:'}
@@ -119,7 +129,7 @@ class LogoutUserComponent extends React.Component {
             </form>
           </Panel>
         </Modal.Body>
-      </LicenseAgreementModalComponent>
+      </LogoutModalComponent>
     );
   }
 }

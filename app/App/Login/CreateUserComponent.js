@@ -16,7 +16,7 @@ import { updateSettings } from 'actions/settingsActionCreators';
 import * as Backend from 'scripts/backend-com';
 import UIController from 'components/UIController';
 
-const LicenseAgreementModalComponent = styled(Modal)({
+const CreateModalComponent = styled(Modal)({
   padding: '1px',
 });
 
@@ -99,7 +99,7 @@ class CreateUserComponent extends React.Component {
     const { handleSubmit } = this.props;
     console.log(this.props);
     return (
-      <LicenseAgreementModalComponent
+      <CreateModalComponent
         fullScreen
         assignClose={close => {
           this.closeModal = close;
@@ -172,7 +172,7 @@ class CreateUserComponent extends React.Component {
             </form>
           </Panel>
         </Modal.Body>
-      </LicenseAgreementModalComponent>
+      </CreateModalComponent>
     );
   }
 }

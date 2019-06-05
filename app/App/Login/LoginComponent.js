@@ -17,7 +17,7 @@ import { updateSettings } from 'actions/settingsActionCreators';
 import * as Backend from 'scripts/backend-com';
 import UIController from 'components/UIController';
 
-const LicenseAgreementModalComponent = styled(Modal)({
+const LoginModalComponent = styled(Modal)({
   padding: '1px',
 });
 
@@ -109,7 +109,7 @@ class LoginComponent extends React.Component {
     const { handleSubmit } = this.props;
     console.log(this.props);
     return (
-      <LicenseAgreementModalComponent
+      <LoginModalComponent
         fullScreen
         assignClose={close => {
           this.closeModal = close;
@@ -179,7 +179,7 @@ class LoginComponent extends React.Component {
               </Button>
               <Button
                 skin="primary"
-                onClick={this.close}
+                onClick={() => this.props.onCloseForgot()}
                 style={{ fontSize: 17, padding: '5px' }}
               >
                 Forgot Password/Pin
@@ -191,10 +191,17 @@ class LoginComponent extends React.Component {
               >
                 Legacy Mode
               </Button>
+              <Button
+                skin="primary"
+                onClick={() => this.props.onCloseTest()}
+                style={{ fontSize: 17, padding: '5px' }}
+              >
+                Test Show recovery
+              </Button>
             </div>
           </Panel>
         </Modal.Body>
-      </LicenseAgreementModalComponent>
+      </LoginModalComponent>
     );
   }
 }

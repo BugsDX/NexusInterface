@@ -7,6 +7,8 @@ import UIController from 'components/UIController';
 import LoginComponent from './LoginComponent';
 import CreateUserComponent from './CreateUserComponent';
 import LogoutUserComponent from './LogoutUserComponent';
+import AttemptRecoveryComponent from './AttemptRecoveryComponent';
+import ShowRecoveryComponent from './ShowRecoveryComponent';
 import { history } from 'store';
 
 import { updateSettings } from 'actions/settingsActionCreators';
@@ -42,11 +44,30 @@ class LoginPage extends Component {
       onClose: () => this.redirectToOverview(),
       onCloseCreate: () => this.openCreateAUser(),
       onCloseLegacy: () => this.switchTolegacy(),
+      onCloseForgot: () => this.openForgot(),
+      onCloseTest: () => this.openShowRecovery(),
+    });
+  }
+
+  openForgot() {
+    UIController.openModal(AttemptRecoveryComponent, {
+      fullScreen: true,
+      onClose: () => this.switchTolegacy(),
+      onCloseBack: () => this.openLoginModal(),
+    });
+  }
+
+  openShowRecovery() {
+    UIController.openModal(ShowRecoveryComponent, {
+      fullScreen: true,
+      onClose: () => this.openLoginModal(),
+      onCloseBack: () => this.openLoginModal(),
     });
   }
 
   componentDidMount() {
     //test
+    //this.props.turnOffTritium();
 
     if (this.props.TEMPLoggedin) {
       UIController.openModal(LogoutUserComponent, {
@@ -60,17 +81,8 @@ class LoginPage extends Component {
         },
       });
     } else {
-      UIController.openModal(LoginComponent, {
-        fullScreen: true,
-        onClose: () => this.redirectToOverview(),
-        onCloseCreate: () => this.openCreateAUser(),
-        onCloseLegacy: () => this.switchTolegacy(),
-      });
+      this.openLoginModal();
     }
-    return null;
-    this.props.turnOffTritium();
-
-    //if already logged in show logout modal
   }
 
   // Mandatory React method
