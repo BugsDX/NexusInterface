@@ -572,5 +572,8 @@
   "Finance.Accounts": "Accounts",
   "Finance.Transaction": "Create Transaction",
   "Finance.Create": "Create Account",
-  "Finance.Actions": "Actions"
+  "Finance.Actions": "Actions",
+
+  "Pin.Enter": "Enter",
+  "Pin.Title": "Enter Pin"
 }
