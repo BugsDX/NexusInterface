@@ -17,7 +17,7 @@ import { updateSettings } from 'actions/settingsActionCreators';
 import * as Backend from 'scripts/backend-com';
 import UIController from 'components/UIController';
 
-const LicenseAgreementModalComponent = styled(Modal)({
+const LoginModalComponent = styled(Modal)({
   padding: '1px',
 });
 
@@ -30,6 +30,7 @@ const LoginFieldSet = styled(FieldSet)({
   null,
   dispatch => ({
     turnOnTritium: () => dispatch(updateSettings({ tritium: true })),
+    tempTurnOffLogIn: () => dispatch({ type: 'TEMP_LOG_IN', payload: true }),
   })
 )
 @reduxForm({
@@ -99,6 +100,7 @@ class LoginComponent extends React.Component {
   };
 
   legacyClose = () => {
+    this.props.tempTurnOffLogIn();
     this.props.onCloseLegacy();
     this.closeModal();
   };
@@ -107,7 +109,7 @@ class LoginComponent extends React.Component {
     const { handleSubmit } = this.props;
     console.log(this.props);
     return (
-      <LicenseAgreementModalComponent
+      <LoginModalComponent
         fullScreen
         assignClose={close => {
           this.closeModal = close;
@@ -152,47 +154,54 @@ class LoginComponent extends React.Component {
                   >
                     Login With Tritium
                   </Button>
-                  <Button
-                    skin="primary"
-                    type="submit"
-                    wide
-                    onClick={this.asddfgh}
-                    style={{ fontSize: 17, marginTop: '5px' }}
-                  >
-                    Create Account
-                  </Button>
-                </div>
-                <div
-                  style={{
-                    marginLeft: 'auto',
-                    marginRight: 'auto',
-                    display: 'grid',
-                    alignItems: 'center',
-                    gridTemplateColumns: 'auto auto',
-                    gridTemplateRows: 'auto',
-                    gridGap: '1em .5em',
-                  }}
-                >
-                  <Button
-                    skin="primary"
-                    onClick={this.close}
-                    style={{ fontSize: 17, padding: '5px' }}
-                  >
-                    Forgot Password/Pin
-                  </Button>
-                  <Button
-                    skin="primary"
-                    onClick={this.legacyClose}
-                    style={{ fontSize: 17, padding: '5px' }}
-                  >
-                    Legacy Mode
-                  </Button>
                 </div>
               </LoginFieldSet>
             </form>
+            <div
+              style={{
+                marginLeft: 'auto',
+                marginRight: 'auto',
+                display: 'grid',
+                alignItems: 'center',
+                gridTemplateColumns: 'auto auto',
+                gridTemplateRows: 'auto',
+                gridGap: '1em .5em',
+              }}
+            >
+              <Button
+                skin="primary"
+                type="submit"
+                wide
+                onClick={this.asddfgh}
+                style={{ fontSize: 17, marginTop: '5px' }}
+              >
+                Create Account
+              </Button>
+              <Button
+                skin="primary"
+                onClick={() => this.props.onCloseForgot()}
+                style={{ fontSize: 17, padding: '5px' }}
+              >
+                Forgot Password/Pin
+              </Button>
+              <Button
+                skin="primary"
+                onClick={this.legacyClose}
+                style={{ fontSize: 17, padding: '5px' }}
+              >
+                Legacy Mode
+              </Button>
+              <Button
+                skin="primary"
+                onClick={() => this.props.onCloseTest()}
+                style={{ fontSize: 17, padding: '5px' }}
+              >
+                Test Show recovery
+              </Button>
+            </div>
           </Panel>
         </Modal.Body>
-      </LicenseAgreementModalComponent>
+      </LoginModalComponent>
     );
   }
 }

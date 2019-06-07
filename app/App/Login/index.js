@@ -7,6 +7,8 @@ import UIController from 'components/UIController';
 import LoginComponent from './LoginComponent';
 import CreateUserComponent from './CreateUserComponent';
 import LogoutUserComponent from './LogoutUserComponent';
+import AttemptRecoveryComponent from './AttemptRecoveryComponent';
+import ShowRecoveryComponent from './ShowRecoveryComponent';
 import { history } from 'store';
 
 import { updateSettings } from 'actions/settingsActionCreators';
@@ -21,7 +23,7 @@ const mapDispatchToProps = dispatch => ({
 
 class LoginPage extends Component {
   redirectToOverview() {
-    //history.push('/');
+    history.push('/');
   }
 
   openCreateAUser() {
@@ -29,11 +31,12 @@ class LoginPage extends Component {
       fullScreen: true,
       onClose: () => this.redirectToOverview(),
       onCloseLegacy: () => this.switchTolegacy(),
+      onCloseBack: () => this.openLoginModal(),
     });
   }
 
   switchTolegacy() {
-    history.push('/');
+    //history.push('/');
   }
 
   openLoginModal() {
@@ -41,33 +44,46 @@ class LoginPage extends Component {
       fullScreen: true,
       onClose: () => this.redirectToOverview(),
       onCloseCreate: () => this.openCreateAUser(),
-      onCloseLegacy: () => this.switchTolegacy(),
+      onCloseLegacy: () => this.redirectToOverview(),
+      onCloseForgot: () => this.openForgot(),
+      onCloseTest: () => this.openShowRecovery(),
+    });
+  }
+
+  openForgot() {
+    UIController.openModal(AttemptRecoveryComponent, {
+      fullScreen: true,
+      onClose: () => this.switchTolegacy(),
+      onCloseBack: () => this.openLoginModal(),
+    });
+  }
+
+  openShowRecovery() {
+    UIController.openModal(ShowRecoveryComponent, {
+      fullScreen: true,
+      onClose: () => this.switchTolegacy(),
+      onCloseBack: () => this.openLoginModal(),
     });
   }
 
   componentDidMount() {
     //test
-    UIController.openModal(LogoutUserComponent, {
-      fullScreen: true,
-      onClose: () => this.switchTolegacy(),
-      onCloseLogout: () => this.openLoginModal(),
-      userInfo: {
-        genesisID:
-          'GEN ID KAJSDJAUFEJNFLKAMLSJDLKASMDLKASDKNADNLKASNKLDNASLdKSND',
-        sessionID: 'SESSION ASDASKDASKLD@299284121',
-      },
-    });
+    //this.props.turnOffTritium();
 
-    return null;
-    this.props.turnOffTritium();
-    UIController.openModal(LoginComponent, {
-      fullScreen: true,
-      onClose: () => this.redirectToOverview(),
-      onCloseCreate: () => this.openCreateAUser(),
-      onCloseLegacy: () => this.switchTolegacy(),
-    });
-
-    //if already logged in show logout modal
+    if (this.props.TEMPLoggedin) {
+      UIController.openModal(LogoutUserComponent, {
+        fullScreen: true,
+        onClose: () => this.switchTolegacy(),
+        onCloseLogout: () => this.openLoginModal(),
+        userInfo: {
+          genesisID:
+            'GEN ID KAJSDJAUFEJNFLKAMLSJDLKASMDLKASDKNADNLKASNKLDNASLdKSND',
+          sessionID: 'SESSION ASDASKDASKLD@299284121',
+        },
+      });
+    } else {
+      this.openLoginModal();
+    }
   }
 
   // Mandatory React method

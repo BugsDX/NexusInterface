@@ -252,7 +252,7 @@ export default class Core {
           '-rpcthreads=4',
           '-connect=node4.nexusoft.io',
           '-beta',
-          `-verbose=${this.verbose}`,
+          `-verbose=4`,
           `-rpcallowip=${this.ip}`,
         ];
         if (settings.forkBlocks) {
@@ -274,7 +274,7 @@ export default class Core {
         }
 
         // Enable staking (default is 0)
-        if (settings.enableStaking == true) parameters.push('-stake=1');
+        if (settings.enableStaking == true) parameters.push('-stake=0');
 
         // Enable detach database on shutdown (default is 0)
         if (settings.detatchDatabaseOnShutdown == true) {
