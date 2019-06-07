@@ -17,6 +17,7 @@ import { updateSettings } from 'actions/settingsActionCreators';
 import * as Backend from 'scripts/backend-com';
 import UIController from 'components/UIController';
 import PrintRecovery from './PrintRecovery';
+import DateField from 'components/DateField';
 
 const ShowRecModalComponent = styled(Modal)({
   padding: '1px',
@@ -112,6 +113,7 @@ class ShowRecoveryComponent extends React.Component {
         <Modal.Body>
           <Panel title={'Show Recovery'}>
             <div> {'Instructions'}</div>
+            <DateField />
             <WordBox>{this.returnWords()}</WordBox>
             <Button
               skin="primary"
