@@ -167,7 +167,8 @@ const mapDispatchToProps = dispatch => ({
         (queue, r) => ({ ...queue, [r.address]: parseFloat(r.amount) }),
         {}
       );
-      return Backend.RunCommand('RPC', 
+      return Backend.RunCommand(
+        'RPC',
         'sendmany',
         [sendFrom, queue],
         minConfirmations,
@@ -206,7 +207,8 @@ class SendForm extends Component {
     if (invalid) {
       // Mark the form touched so that the validation errors will be shown.
       // redux-form doesn't have the `touchAll` feature yet so we have to list all fields manually.
-      // redux-form also doesn't have the API to get all the field names yet so we have to connect to the store to retrieve it manually
+      // redux-form also doesn't have the API to get all the field names yet
+      // so we have to connect to the store to retrieve it manually
       touch(...fieldNames);
       return;
     }
