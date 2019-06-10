@@ -24,11 +24,12 @@ class Accounts extends Component {
   render() {
     return (
       <Panel title={'Accounts'}>
-        {'TEST ACCOUNTS'}
-        <PanelHolder>
-          <UserPanel />
-          <AccountsPanel />
-        </PanelHolder>
+        <div>
+          <PanelHolder>
+            <UserPanel />
+            <AccountsPanel />
+          </PanelHolder>
+        </div>
       </Panel>
     );
   }
