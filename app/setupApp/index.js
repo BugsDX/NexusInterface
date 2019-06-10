@@ -105,7 +105,13 @@ function startCoreOuputeWatch(store) {
   let datadir = configuration.GetCoreDataDir();
 
   var debugfile;
-  if (process.platform === 'win32') {
+  if (fs.readdirSync(datadir).includes('log')) {
+    if (process.platform === 'win32') {
+      debugfile = datadir + '\\log\0.log';
+    } else {
+      debugfile = datadir + '/log/0.log';
+    }
+  } else if (process.platform === 'win32') {
     debugfile = datadir + '\\debug.log';
   } else {
     debugfile = datadir + '/debug.log';

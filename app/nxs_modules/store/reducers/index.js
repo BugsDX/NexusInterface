@@ -15,6 +15,7 @@ import ui from './ui';
 import modules from './modules';
 import moduleStates from './moduleStates';
 import core from './core';
+import finance from './finance';
 
 import { addLocaleData } from 'react-intl';
 import ru from 'react-intl/locale-data/ru';
@@ -42,6 +43,7 @@ export default function createRootReducer(history) {
       router: routerReducer,
       list,
       market,
+      finance,
       transactions,
       exchange,
       common,
