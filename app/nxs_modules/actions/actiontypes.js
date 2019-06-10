@@ -177,3 +177,6 @@ export const UPDATE_MODULE_STATE = 'UPDATE_MODULE_STATE';
 
 //TMEP
 export const TEMP_LOG_IN = 'TEMP_LOG_IN';
+
+// Finance
+export const TRITIUM_ACCOUNTS_LIST = 'TRITIUM_ACCOUNTS_LIST';

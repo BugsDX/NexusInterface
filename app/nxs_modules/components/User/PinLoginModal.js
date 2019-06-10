@@ -2,10 +2,10 @@
 import React, { Component } from 'react';
 import styled from '@emotion/styled';
 
-import Modal from './Modal';
-import TextField from './TextField';
-import Button from './Button';
-import Text from './Text';
+import Modal from '../Modal';
+import TextField from '../TextField';
+import Button from '../Button';
+import Text from '../Text';
 import * as Backend from 'scripts/backend-com';
 import UIController from 'components/UIController';
 

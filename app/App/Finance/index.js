@@ -8,7 +8,7 @@ import Text from 'components/Text';
 import Tooltip from 'components/Tooltip';
 import Button from 'components/Button';
 import Icon from 'components/Icon';
-import PinLoginModal from 'components/PinLoginModal';
+import PinLoginModal from 'components/User/PinLoginModal';
 import AccountsContainer from './AccountsContainer';
 import UIController from 'components/UIController';
 
