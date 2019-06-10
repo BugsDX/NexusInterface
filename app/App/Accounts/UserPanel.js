@@ -70,6 +70,22 @@ class UserPanel extends Component {
     });
   }
 
+  userChangePin = () => {
+    console.log('ChangePin');
+  };
+
+  userChangePassword = () => {
+    console.log('ChangePassword');
+  };
+
+  userChangeRecovery = () => {
+    console.log('ChangeRecovery');
+  };
+
+  userLogout = () => {
+    console.log('Logout');
+  };
+
   render() {
     //const {username, locked, sigchain} = this.props;
     const username = 'Test User';
@@ -91,17 +107,29 @@ class UserPanel extends Component {
           >
             {locked == true ? 'Unlock' : 'Lock'}
           </Button>
-          <Button style={{ maxWidth: '150px', margin: '0.25em' }}>
+          <Button
+            style={{ maxWidth: '150px', margin: '0.25em' }}
+            onClick={this.userChangePin}
+          >
             {'Change Pin'}
           </Button>
-          <Button style={{ maxWidth: '150px', margin: '0.25em' }}>
+          <Button
+            style={{ maxWidth: '150px', margin: '0.25em' }}
+            onClick={this.userChangePassword}
+          >
             {'Change Password'}
           </Button>
-          <Button style={{ maxWidth: '150px', margin: '0.25em' }}>
+          <Button
+            style={{ maxWidth: '150px', margin: '0.25em' }}
+            onClick={this.userChangeRecovery}
+          >
             {'Recovery'}
           </Button>
           <br />
-          <Button style={{ maxWidth: '150px', margin: '0.25em' }}>
+          <Button
+            style={{ maxWidth: '150px', margin: '0.25em' }}
+            onClick={this.userLogout}
+          >
             {'Logout'}
           </Button>
         </BottomButtons>
