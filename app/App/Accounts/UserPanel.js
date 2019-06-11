@@ -9,6 +9,13 @@ import userIcon from 'images/user.sprite.svg';
 import Button from 'components/Button';
 import Icon from 'components/Icon';
 import NexusAddress from 'components/NexusAddress';
+import UIController from 'components/UIController';
+
+import UserLock from 'components/User/UserLock';
+import UserUnlock from 'components/User/UserUnlock';
+import ChangePassword from 'components/User/ChangePassword';
+import ChangePin from 'components/User/ChangePin';
+//import ChangeRecovery from 'components/User/ChangeRecovery';
 
 const PanelHolder = styled.div(({ theme }) => ({
   background: color.lighten(theme.background, 0.2),
@@ -68,14 +75,22 @@ class UserPanel extends Component {
     this.setState({
       testLock: !isLocked,
     });
+
+    if (isLocked) {
+      UIController.openModal(UserUnlock);
+    } else {
+      UIController.openModal(UserLock);
+    }
   }
 
   userChangePin = () => {
     console.log('ChangePin');
+    UIController.openModal(ChangePin);
   };
 
   userChangePassword = () => {
     console.log('ChangePassword');
+    UIController.openModal(ChangePassword);
   };
 
   userChangeRecovery = () => {

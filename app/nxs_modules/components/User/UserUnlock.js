@@ -7,7 +7,6 @@ import Modal from 'components/Modal';
 import Button from 'components/Button';
 import Text from '../Text';
 import Switch from 'components/Switch';
-import TextField from 'components/TextField';
 import * as Backend from 'scripts/backend-com';
 import UIController from 'components/UIController';
 
@@ -41,23 +40,25 @@ const Buttons = styled.div({
   alignItems: 'center',
 });
 
-export default class ChangePin extends Component {
+export default class UserLock extends Component {
   constructor() {
     super();
     this.state = {
-      oldPass: '',
-      newPass: '',
-      confirmNewPass: '',
+      mintingEnabled: true,
+      transactionsEnabled: true,
     };
   }
 
-  tryPinChange = () => {
-    console.log(this.state);
+  componentDidMount() {
+    //asdas
+  }
 
+  launchPinModal() {
     UIController.openModal(PinLoginModal, {
       callback: payload => this.payload(payload),
       params: {
-        ...this.state,
+        minting: this.state.mintingEnabled,
+        transactions: this.state.transactionsEnabled,
       },
       onClose: () => {
         console.log('&&&&');
@@ -67,52 +68,50 @@ export default class ChangePin extends Component {
       verb: 'unlock',
       noun: 'user',
     });
-  };
+  }
 
-  setOldPass = e => {
+  pinCallback(payload) {
+    console.log('$$$$$');
+    console.log(payload);
+  }
+
+  switchMinting = e => {
+    console.log(e);
+    console.log(e.target);
     console.log(e.target.value);
     this.setState({
-      oldPass: e.target.value,
+      mintingEnabled: !this.state.mintingEnabled,
     });
   };
-
-  setNewPass = e => {
+  switchTransactions = e => {
+    console.log(e);
+    console.log(e.target);
     console.log(e.target.value);
     this.setState({
-      newPass: e.target.value,
-    });
-  };
-  setConfirmNewPass = e => {
-    console.log(e.target.value);
-    this.setState({
-      confirmNewPass: e.target.value,
+      transactionsEnabled: !this.state.transactionsEnabled,
     });
   };
 
   render() {
+    const { mintingEnabled, transactionsEnabled } = this.state;
     return (
       <SmallModal assignClose={closeModal => (this.closeModal = closeModal)}>
         <Container>
-          <h2>{'Change Pin'}</h2>
+          <h2>{'User Unlock'}</h2>
           <Option>
-            <OptionLabel>{'Current Pin'}</OptionLabel>
-            <TextField
-              style={{ marginTop: '1em', marginLeft: '1em' }}
-              onChange={this.setOldPass}
+            <OptionLabel>{'Enable Minting'}</OptionLabel>
+            <Switch
+              checked={mintingEnabled}
+              onChange={this.switchMinting}
+              style={{ marginTop: '1.75em' }}
             />
           </Option>
           <Option>
-            <OptionLabel>{'New Pin'}</OptionLabel>
-            <TextField
-              style={{ marginTop: '1em', marginLeft: '1em' }}
-              onChange={this.setNewPass}
-            />
-          </Option>
-          <Option>
-            <OptionLabel>{'Confirm New Pin'}</OptionLabel>
-            <TextField
-              style={{ marginTop: '1em', marginLeft: '1em' }}
-              onChange={this.setConfirmNewPass}
+            <OptionLabel>{'Enable Transactions'}</OptionLabel>
+            <Switch
+              checked={transactionsEnabled}
+              onChange={this.switchTransactions}
+              style={{ marginTop: '1.75em' }}
             />
           </Option>
           <Buttons>
@@ -125,10 +124,10 @@ export default class ChangePin extends Component {
             </Button>
             <Button
               skin="filled"
-              onClick={this.tryPinChange}
+              onClick={() => this.launchPinModal()}
               style={{ margin: '.5em' }}
             >
-              {'Change Pin'}
+              <Text id="Settings.LockWallet" />
             </Button>
           </Buttons>
         </Container>
