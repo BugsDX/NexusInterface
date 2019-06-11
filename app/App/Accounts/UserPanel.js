@@ -13,6 +13,9 @@ import UIController from 'components/UIController';
 
 import UserLock from 'components/User/UserLock';
 import UserUnlock from 'components/User/UserUnlock';
+import ChangePassword from 'components/User/ChangePassword';
+import ChangePin from 'components/User/ChangePin';
+//import ChangeRecovery from 'components/User/ChangeRecovery';
 
 const PanelHolder = styled.div(({ theme }) => ({
   background: color.lighten(theme.background, 0.2),
@@ -82,10 +85,12 @@ class UserPanel extends Component {
 
   userChangePin = () => {
     console.log('ChangePin');
+    UIController.openModal(ChangePin);
   };
 
   userChangePassword = () => {
     console.log('ChangePassword');
+    UIController.openModal(ChangePassword);
   };
 
   userChangeRecovery = () => {
