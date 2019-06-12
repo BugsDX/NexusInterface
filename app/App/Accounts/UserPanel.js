@@ -10,12 +10,15 @@ import Button from 'components/Button';
 import Icon from 'components/Icon';
 import NexusAddress from 'components/NexusAddress';
 import UIController from 'components/UIController';
+import * as Backend from 'scripts/backend-com';
 
 import UserLock from 'components/User/UserLock';
 import UserUnlock from 'components/User/UserUnlock';
 import ChangePassword from 'components/User/ChangePassword';
 import ChangePin from 'components/User/ChangePin';
 //import ChangeRecovery from 'components/User/ChangeRecovery';
+
+import { listTransactions } from 'api/UserApi';
 
 const PanelHolder = styled.div(({ theme }) => ({
   background: color.lighten(theme.background, 0.2),
@@ -70,6 +73,13 @@ class UserPanel extends Component {
     };
   }
 
+  componentDidMount() {
+    listTransactions({
+      genesis:
+        'a74774dc075e59d03639b56da8c29736fe248888a43c6103060409dd11273417',
+    });
+  }
+
   LockUnLock(isLocked) {
     console.log(isLocked);
     this.setState({
@@ -99,6 +109,21 @@ class UserPanel extends Component {
 
   userLogout = () => {
     console.log('Logout');
+    UIController.openConfirmDialog({
+      question: 'Are you sure you want to log out?',
+      skinYes: 'danger',
+      callbackYes: () => {
+        Backend.RunCommand(
+          'API',
+          {
+            api: 'user',
+            verb: 'logout',
+            noun: 'user',
+          },
+          []
+        );
+      },
+    });
   };
 
   render() {
