@@ -9,8 +9,9 @@ import Tooltip from 'components/Tooltip';
 import Button from 'components/Button';
 import Icon from 'components/Icon';
 import PinLoginModal from 'components/User/PinLoginModal';
-import AccountsContainer from './AccountsContainer';
+import CreditDebitForm from './CreditDebitForm';
 import UIController from 'components/UIController';
+import CreateAccountModal from './CreateAccountModal';
 
 import { LoadTritiumAccounts } from 'actions/financeActionCreators';
 
@@ -55,25 +56,14 @@ class Finance extends Component {
             <Button
               square
               skin="primary"
-              onClick={() =>
-                UIController.openModal(PinLoginModal, {
-                  callback: payload => console.log(payload),
-                  params: { name: 'payroll' },
-                  api: 'finance',
-                  verb: 'create',
-                  noun: 'account',
-                })
-              }
+              onClick={() => UIController.openModal(PinLoginModal)}
             >
               <Icon icon={PlusIcon} />
             </Button>
           </Tooltip.Trigger>
         }
       >
-        <LeftBox>
-          {/* <AccountsContainer accounts={tritiumAccounts} /> */}
-        </LeftBox>
-        <RightBox />
+        <CreditDebitForm />
       </Panel>
     );
   }

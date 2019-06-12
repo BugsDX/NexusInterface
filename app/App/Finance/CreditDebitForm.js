@@ -14,13 +14,13 @@ import Button from 'components/Button';
 import TextField from 'components/TextField';
 import Select from 'components/Select';
 import FormField from 'components/FormField';
+
 import UIController from 'components/UIController';
 import Link from 'components/Link';
 import { rpcErrorHandler } from 'utils/form';
 import sendIcon from 'images/send.sprite.svg';
 
 // Internal Local
-import Recipients from './Recipients';
 import {
   getAccountOptions,
   getAddressNameMap,
@@ -51,7 +51,7 @@ const mapStateToProps = ({
   accountOptions: getAccountOptions(myAccounts),
   addressNameMap: getAddressNameMap(addressBook),
   fieldNames: getRegisteredFieldNames(
-    form.sendNXS && form.sendNXS.registeredFields
+    form.finance && form.finance.registeredFields
   ),
 });
 
@@ -70,7 +70,7 @@ const mapDispatchToProps = dispatch => ({
   mapDispatchToProps
 )
 @reduxForm({
-  form: 'sendNXS',
+  form: 'finance',
   destroyOnUnmount: false,
   initialValues: {
     sendFrom: null,
@@ -278,7 +278,7 @@ class SendForm extends Component {
 
     return (
       <SendFormComponent onSubmit={this.confirmSend}>
-        <FormField label={<Text id="sendReceive.SendFrom" />}>
+        <FormField label={<Text id="Finance.Debit" />}>
           <Field
             component={Select.RF}
             name="sendFrom"
@@ -287,33 +287,16 @@ class SendForm extends Component {
           />
         </FormField>
 
-        <FieldArray
-          component={Recipients}
-          name="recipients"
-          change={change}
-          addRecipient={this.addRecipient}
-        />
-
-        <Text id="sendReceive.EnterYourMessage">
-          {placeholder => (
-            <FormField connectLabel label={<Text id="sendReceive.Message" />}>
-              <Field
-                component={TextField.RF}
-                name="message"
-                multiline
-                rows={1}
-                placeholder={placeholder}
-              />
-            </FormField>
-          )}
-        </Text>
+        <FormField label={<Text id="Finance.Recipiant" />}>
+          <Field
+            component={TextField.RF}
+            name="recipiant"
+            placeholder={<Text id="sendReceive.SelectAnAccount" />}
+            options={accountOptions}
+          />
+        </FormField>
 
         <SendFormButtons>
-          <FieldArray
-            component={this.renderAddRecipientButton}
-            name="recipients"
-          />
-
           <Button type="submit" skin="primary">
             <Icon icon={sendIcon} className="space-right" />
             <Text id="sendReceive.SendNow" />

@@ -79,6 +79,10 @@ export default class PinLogin extends Component {
       });
   }
 
+  componentDidMount() {
+    this.Input.focus();
+  }
+
   componentWillUnMount() {
     this.setState({ error: null, value: '' });
   }
@@ -92,6 +96,9 @@ export default class PinLogin extends Component {
           </h2>
           <TextField
             type="password"
+            inputRef={input => {
+              this.Input = input;
+            }}
             onChange={e => this.setState({ value: e.target.value })}
             onKeyUp={e => {
               if (e.key === 'Enter' && !this.state.disable) {
