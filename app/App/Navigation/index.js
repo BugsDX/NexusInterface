@@ -25,6 +25,8 @@ import addressBookIcon from 'images/address-book.sprite.svg';
 import settingsIcon from 'images/settings.sprite.svg';
 import consoleIcon from 'images/console.sprite.svg';
 import FinanceIcon from 'images/nxs-staking.sprite.svg';
+import userIcon from 'images/user.sprite.svg';
+import tokensIcon from 'image/nxs-staking.sprite.svg';
 // import shapeshiftIcon from 'images/shapeshift.sprite.svg';
 // import trustListIcon from 'images/trust-list.sprite.svg';
 
@@ -159,7 +161,7 @@ const Navigation = connect(
           <NavItem icon={logoIcon} to="/Login">
             <Text id="Footer.Login" />
           </NavItem>
-          <NavItem icon={logoIcon} to="/Accounts">
+          <NavItem icon={userIcon} to="/Accounts">
             <Text id="Footer.Accounts" />
           </NavItem>
           <NavItem icon={logoIcon} to="/Assets">
@@ -167,6 +169,9 @@ const Navigation = connect(
           </NavItem>
           <NavItem icon={logoIcon} to="/Contacts">
             <Text id="Footer.Contacts" />
+          </NavItem>
+          <NavItem icon={tokensIcon} to="/Tokens">
+            <Text id="Footer.Tokens" />
           </NavItem>
         </>
       )}

@@ -76,7 +76,20 @@ export function listTransactions({
     });
 }
 
-export function listTransactionsAll({
+/**
+ *
+ *
+ * @export
+ * @param {*} {
+ *   genesis = null,
+ *   username = null,
+ *   page = 0,
+ *   limit = 100,
+ *   verbose = 'default',
+ * }
+ * @returns
+ */
+export async function listTransactionsAll({
   genesis = null,
   username = null,
   page = 0,
@@ -84,10 +97,11 @@ export function listTransactionsAll({
   verbose = 'default',
 }) {
   checkInput({ genesis, username, page, limit, verbose });
-  recursiveCommand(
+  const list = recursiveCommand(
     { api: 'users', verb: 'list', noun: 'transactions' },
     { genesis, username, page, limit, verbose }
   );
+  return list;
 }
 
 export function listNotifications({
