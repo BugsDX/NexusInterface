@@ -123,7 +123,7 @@ class UserPanel extends Component {
 
   render() {
     //const {username, locked, sigchain} = this.props;
-    const username = 'Test User';
+    const username = this.props.userName;
     const sigchain = this.props.userGen;
     const locked = this.state.testLock;
 

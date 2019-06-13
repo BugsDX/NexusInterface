@@ -32,6 +32,7 @@ class LoginPage extends Component {
       onClose: () => this.redirectToOverview(),
       onCloseLegacy: () => this.switchTolegacy(),
       onCloseBack: () => this.openLoginModal(),
+      onFinishCreate: () => this.openShowRecovery(),
     });
   }
 

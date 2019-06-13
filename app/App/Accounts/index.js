@@ -26,7 +26,10 @@ class Accounts extends Component {
       <Panel title={'Accounts'}>
         <div>
           <PanelHolder>
-            <UserPanel userGen={this.props.userGenesis} />
+            <UserPanel
+              userGen={this.props.userGenesis}
+              userName={this.props.userName}
+            />
             <AccountsPanel />
           </PanelHolder>
         </div>

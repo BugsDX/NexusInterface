@@ -30,6 +30,62 @@ const LoginFieldSet = styled(FieldSet)({
     turnOnTritium: () => dispatch(updateSettings({ tritium: true })),
   })
 )
+class CreateUserComponent extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      submitting: false,
+    };
+  }
+
+  close = () => {
+    this.closeModal();
+  };
+
+  legacyClose = () => {
+    this.props.onCloseLegacy();
+    this.closeModal();
+  };
+
+  goBackToLogin = () => {
+    this.props.onCloseBack();
+    this.closeModal();
+  };
+
+  goToRecovery = () => {
+    this.props.onFinishCreate();
+    this.closeModal();
+  };
+
+  changeUsername = e => {
+    this.setState({});
+  };
+
+  render() {
+    const { handleSubmit, submitting } = this.props;
+    //const { submitting } = this.state;
+    console.log(this);
+    return (
+      <CreateModalComponent
+        fullScreen
+        assignClose={close => {
+          this.closeModal = close;
+        }}
+        {...this.props}
+      >
+        <Modal.Header>Tritium Login</Modal.Header>
+        <Modal.Body>
+          <Panel title={'Create Account'}>
+            <CreateUserForm closeModal={this.goToRecovery} {...this.props} />
+          </Panel>
+        </Modal.Body>
+      </CreateModalComponent>
+    );
+  }
+}
+
+export default CreateUserComponent;
+
 @reduxForm({
   form: 'createAccount',
   destroyOnUnmount: true,
@@ -65,9 +121,10 @@ const LoginFieldSet = styled(FieldSet)({
   },
   onSubmitSuccess: async (result, dispatch, props) => {
     UIController.showNotification(<Text id="Settings.LoggedIn" />, 'success');
+    console.log(result);
     console.log('PASS');
-    this.props.turnOnTritium();
-    this.close();
+    props.turnOnTritium();
+    props.closeModal();
   },
   onSubmitFail: (errors, dispatch, submitError) => {
     console.log('FAIL');
@@ -88,122 +145,80 @@ const LoginFieldSet = styled(FieldSet)({
     }
   },
 })
-class CreateUserComponent extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      submitting: false,
-    };
-  }
-
-  close = () => {
-    this.closeModal();
-  };
-
-  legacyClose = () => {
-    this.props.onCloseLegacy();
-    this.closeModal();
-  };
-
-  goBackToLogin = () => {
-    this.props.onCloseBack();
-    this.closeModal();
-  };
-
-  changeUsername = e => {
-    this.setState({});
-  };
-
+class CreateUserForm extends React.Component {
   render() {
     const { handleSubmit, submitting } = this.props;
-    //const { submitting } = this.state;
-    console.log(this);
     return (
-      <CreateModalComponent
-        fullScreen
-        assignClose={close => {
-          this.closeModal = close;
-        }}
-        {...this.props}
-      >
-        <Modal.Header>Tritium Login</Modal.Header>
-        <Modal.Body>
-          <Panel title={'Create Account'}>
-            <form onSubmit={handleSubmit}>
-              <LoginFieldSet legend="Create Account">
-                <FormField connectLabel label={<Text id="Settings.Username" />}>
-                  <Field
-                    component={TextField.RF}
-                    name="username"
-                    type="text"
-                    placeholder={'Username'}
-                    required
-                  />
-                </FormField>
-                <FormField connectLabel label={<Text id="Settings.Password" />}>
-                  <Field
-                    component={TextField.RF}
-                    name="password"
-                    type="text"
-                    placeholder={'Password'}
-                  />
-                </FormField>
-                <FormField
-                  connectLabel
-                  label={<Text id="Settings.Pin" />}
-                  subLable={'ASdasaddsa'}
-                >
-                  <Field
-                    component={TextField.RF}
-                    name="pin"
-                    type="text"
-                    placeholder={'Pin'}
-                  />
-                </FormField>
-                <div style={{ padding: '5px', paddingTop: '10px' }}>
-                  <Button
-                    skin="primary"
-                    onClick={handleSubmit}
-                    wide
-                    disabled={submitting}
-                    style={{ fontSize: 17, marginTop: '5px' }}
-                  >
-                    Create Account
-                  </Button>
-                </div>
-                <div
-                  style={{
-                    marginLeft: 'auto',
-                    marginRight: 'auto',
-                    display: 'grid',
-                    alignItems: 'center',
-                    gridTemplateColumns: 'auto auto',
-                    gridTemplateRows: 'auto',
-                    gridGap: '1em .5em',
-                  }}
-                >
-                  <Button
-                    skin="primary"
-                    onClick={this.goBackToLogin}
-                    style={{ fontSize: 17, padding: '5px' }}
-                  >
-                    Login
-                  </Button>
-                  <Button
-                    skin="primary"
-                    onClick={this.legacyClose}
-                    style={{ fontSize: 17, padding: '5px' }}
-                  >
-                    Legacy Mode
-                  </Button>
-                </div>
-              </LoginFieldSet>
-            </form>
-          </Panel>
-        </Modal.Body>
-      </CreateModalComponent>
+      <form onSubmit={handleSubmit}>
+        <LoginFieldSet legend="Create Account">
+          <FormField connectLabel label={<Text id="Settings.Username" />}>
+            <Field
+              component={TextField.RF}
+              name="username"
+              type="text"
+              placeholder={'Username'}
+              required
+            />
+          </FormField>
+          <FormField connectLabel label={<Text id="Settings.Password" />}>
+            <Field
+              component={TextField.RF}
+              name="password"
+              type="text"
+              placeholder={'Password'}
+            />
+          </FormField>
+          <FormField
+            connectLabel
+            label={<Text id="Settings.Pin" />}
+            subLable={'ASdasaddsa'}
+          >
+            <Field
+              component={TextField.RF}
+              name="pin"
+              type="text"
+              placeholder={'Pin'}
+            />
+          </FormField>
+          <div style={{ padding: '5px', paddingTop: '10px' }}>
+            <Button
+              skin="primary"
+              onClick={handleSubmit}
+              wide
+              disabled={submitting}
+              style={{ fontSize: 17, marginTop: '5px' }}
+            >
+              Create Account
+            </Button>
+          </div>
+          <div
+            style={{
+              marginLeft: 'auto',
+              marginRight: 'auto',
+              display: 'grid',
+              alignItems: 'center',
+              gridTemplateColumns: 'auto auto',
+              gridTemplateRows: 'auto',
+              gridGap: '1em .5em',
+            }}
+          >
+            <Button
+              skin="primary"
+              onClick={this.goBackToLogin}
+              style={{ fontSize: 17, padding: '5px' }}
+            >
+              Login
+            </Button>
+            <Button
+              skin="primary"
+              onClick={this.legacyClose}
+              style={{ fontSize: 17, padding: '5px' }}
+            >
+              Legacy Mode
+            </Button>
+          </div>
+        </LoginFieldSet>
+      </form>
     );
   }
 }
-
-export default CreateUserComponent;

@@ -35,6 +35,9 @@ const LoginFieldSet = styled(FieldSet)({
     setUserGenesis: returnData => {
       dispatch({ type: TYPE.TRITIUM_SET_USER_GENESIS, payload: returnData });
     },
+    setUserName: returnData => {
+      dispatch({ type: TYPE.TRITIUM_SET_USER_NAME, payload: returnData });
+    },
   })
 )
 class LoginComponent extends React.Component {
@@ -114,6 +117,14 @@ class LoginComponent extends React.Component {
               >
                 Test Show recovery
               </Button>
+              <Button
+                wide
+                skin="primary"
+                onClick={this.close}
+                style={{ fontSize: 17, padding: '5px' }}
+              >
+                Test Close Go To Overview
+              </Button>
             </div>
           </Panel>
         </Modal.Body>
@@ -148,7 +159,7 @@ export default LoginComponent;
     }
     return errors;
   },
-  onSubmit: async ({ username, password, pin }, props) => {
+  onSubmit: async ({ username, password, pin }, dispatch, props) => {
     console.log('ONSUBMIT');
     console.log(props);
     const asdgh = await Backend.RunCommand(
@@ -161,15 +172,11 @@ export default LoginComponent;
   },
   onSubmitSuccess: async (result, dispatch, props) => {
     console.log('SUCESSS');
-    console.log(props);
-    console.log(result);
-    console.log(dispatch);
     props.setUserGenesis(result.data.result.genesis);
+    props.setUserName(props.values.username);
     UIController.showNotification(<Text id="Settings.LoggedIn" />, 'success');
     console.log('PASS');
     props.turnOnTritium();
-    //props.closeModal();
-    //props.goBack();
     props.closeModal();
   },
   onSubmitFail: (errors, dispatch, submitError) => {
@@ -192,7 +199,6 @@ export default LoginComponent;
 })
 class LoginForm extends React.Component {
   render() {
-    console.log(this.props);
     const { handleSubmit, submitting } = this.props;
     return (
       <form onSubmit={handleSubmit}>
@@ -224,20 +230,7 @@ class LoginForm extends React.Component {
           <div style={{ padding: '5px', paddingTop: '10px' }}>
             <Button
               skin="primary"
-              onClick={handleSubmit(
-                async ({ username, password, pin }, props, sdasdas) => {
-                  console.log('ONSUBMIT');
-                  console.log(sdasdas);
-                  console.log(props);
-                  const asdgh = await Backend.RunCommand(
-                    'API',
-                    { api: 'users', verb: 'login', noun: 'user' },
-                    [{ username: username, password: password, pin: pin }]
-                  );
-                  console.log(asdgh);
-                  return asdgh;
-                }
-              )}
+              onClick={handleSubmit}
               wide
               disabled={submitting}
               style={{ fontSize: 17, padding: '5px' }}
