@@ -31,8 +31,8 @@ const LoginFieldSet = styled(FieldSet)({
   })
 )
 @reduxForm({
-  form: 'login',
-  destroyOnUnmount: false,
+  form: 'createAccount',
+  destroyOnUnmount: true,
   initialValues: {
     username: '',
     password: '',
@@ -54,7 +54,9 @@ const LoginFieldSet = styled(FieldSet)({
     return errors;
   },
   onSubmit: ({ username, password, pin }, props) => {
-    console.log(this);
+    console.log('ONSUBMIT');
+    console.log(`${username} , ${password} , ${pin}`);
+    console.log(props);
     return Backend.RunCommand(
       'API',
       { api: 'users', verb: 'create', noun: 'user' },
@@ -69,6 +71,7 @@ const LoginFieldSet = styled(FieldSet)({
   },
   onSubmitFail: (errors, dispatch, submitError) => {
     console.log('FAIL');
+
     if (!errors || !Object.keys(errors).length) {
       let note = submitError || <Text id="Common.UnknownError" />;
       if (
@@ -86,6 +89,13 @@ const LoginFieldSet = styled(FieldSet)({
   },
 })
 class CreateUserComponent extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      submitting: false,
+    };
+  }
+
   close = () => {
     this.closeModal();
   };
@@ -100,9 +110,14 @@ class CreateUserComponent extends React.Component {
     this.closeModal();
   };
 
+  changeUsername = e => {
+    this.setState({});
+  };
+
   render() {
-    const { handleSubmit } = this.props;
-    console.log(this.props);
+    const { handleSubmit, submitting } = this.props;
+    //const { submitting } = this.state;
+    console.log(this);
     return (
       <CreateModalComponent
         fullScreen
@@ -122,6 +137,7 @@ class CreateUserComponent extends React.Component {
                     name="username"
                     type="text"
                     placeholder={'Username'}
+                    required
                   />
                 </FormField>
                 <FormField connectLabel label={<Text id="Settings.Password" />}>
@@ -147,8 +163,9 @@ class CreateUserComponent extends React.Component {
                 <div style={{ padding: '5px', paddingTop: '10px' }}>
                   <Button
                     skin="primary"
-                    type="submit"
+                    onClick={handleSubmit}
                     wide
+                    disabled={submitting}
                     style={{ fontSize: 17, marginTop: '5px' }}
                   >
                     Create Account

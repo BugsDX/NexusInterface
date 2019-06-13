@@ -18,7 +18,7 @@ import ChangePassword from 'components/User/ChangePassword';
 import ChangePin from 'components/User/ChangePin';
 //import ChangeRecovery from 'components/User/ChangeRecovery';
 
-import { listTransactions } from 'api/UserApi';
+import { listAccounts } from 'api/UserApi';
 
 const PanelHolder = styled.div(({ theme }) => ({
   background: color.lighten(theme.background, 0.2),
@@ -73,12 +73,7 @@ class UserPanel extends Component {
     };
   }
 
-  componentDidMount() {
-    listTransactions({
-      genesis:
-        'a74774dc075e59d03639b56da8c29736fe248888a43c6103060409dd11273417',
-    });
-  }
+  componentDidMount() {}
 
   LockUnLock(isLocked) {
     console.log(isLocked);
@@ -129,7 +124,7 @@ class UserPanel extends Component {
   render() {
     //const {username, locked, sigchain} = this.props;
     const username = 'Test User';
-    const sigchain = 'OOOOOOOOOTESTSIGCHAINOOOOOOOOOOOOOOOO';
+    const sigchain = this.props.userGen;
     const locked = this.state.testLock;
 
     return (

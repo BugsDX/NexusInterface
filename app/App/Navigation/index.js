@@ -26,7 +26,7 @@ import settingsIcon from 'images/settings.sprite.svg';
 import consoleIcon from 'images/console.sprite.svg';
 import FinanceIcon from 'images/nxs-staking.sprite.svg';
 import userIcon from 'images/user.sprite.svg';
-import tokensIcon from 'image/nxs-staking.sprite.svg';
+import tokensIcon from 'images/nxs-staking.sprite.svg';
 // import shapeshiftIcon from 'images/shapeshift.sprite.svg';
 // import trustListIcon from 'images/trust-list.sprite.svg';
 

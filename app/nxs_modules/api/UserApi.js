@@ -146,16 +146,55 @@ export function listAccounts({
   page = 0,
   limit = 100,
 }) {
-  checkInput({ genesis, username, page, limit });
+  return new Promise(resolve => {
+    checkInput({ genesis, username, page, limit });
+    let inputs = {
+      genesis: genesis,
+      username: username,
+      page: page,
+      limit: limit,
+    };
+
+    if (genesis === null) delete inputs.genesis;
+
+    if (username === null) delete inputs.username;
+
+    console.log(inputs);
+    resolve(
+      Backend.RunCommand(
+        'api',
+        {
+          api: 'users',
+          verb: 'list',
+          noun: 'accounts',
+        },
+        inputs
+      )
+        .then(({ data }) => {
+          console.log(data);
+          return data.result;
+        })
+        .catch(error => {
+          catchError(error);
+        })
+    );
+  });
 }
 
-export function listAccountsAll({
+export async function listAccountsAll({
   genesis = null,
   username = null,
   page = 0,
   limit = 100,
 }) {
-  checkInput({ genesis, username, page, limit });
+  return new Promise(async resolve => {
+    checkInput({ genesis, username, page, limit });
+    const list = await recursiveCommand(
+      { api: 'users', verb: 'list', noun: 'accounts' },
+      { genesis, username, page, limit }
+    );
+    resolve(list);
+  });
 }
 
 export function listTokens({
@@ -215,12 +254,14 @@ export function listNamesAll({
 async function recursiveCommand(command, params) {
   return new Promise(async resolve => {
     console.log(`Passwith${params}`);
+    console.log(params);
 
-    const data = await Backend.RunCommand('Api', command, params);
-    if (data.result.length != 0) {
-      console.log(data.result);
+    const payload = await Backend.RunCommand('Api', command, params);
+    console.log(payload);
+    if (payload.data.result.length != 0) {
+      console.log(payload.data.result);
       console.log('Length Not Zero');
-      const newParams = { ...params, page: ++params };
+      const newParams = { ...params, page: ++params.page };
       return resolve(recursiveCommand(command, newParams));
     } else {
       console.log('Length Is Zero');
@@ -229,17 +270,33 @@ async function recursiveCommand(command, params) {
   });
 }
 
-const recursiveCall = index => {
-  return new Promise(resolve => {
-    console.log(index);
-    if (index < 3) {
-      return resolve(recursiveCall(++index));
-    } else {
-      return resolve();
-    }
-  });
-};
+function catchError(error) {
+  if (error.response) {
+    console.log(error.response);
+    UIController.openErrorDialog({
+      message: 'Error',
+      note: error.response.data.error.message,
+    });
+  } else if (error.request) {
+    console.log(error.request);
+    UIController.openErrorDialog({
+      message: 'Error',
+      note: error.request.data.error.message,
+    });
+  } else {
+    console.log('Error', error.message);
+    UIController.openErrorDialog({
+      message: 'Error',
+      note: error.message.data.error.message,
+    });
+  }
+}
 
+/**
+ *
+ *
+ * @param {*} input
+ */
 function checkInput(input) {
   if (input.genesis == null && input.username == null) {
     throw 'Provide Either a Genesis or Username';

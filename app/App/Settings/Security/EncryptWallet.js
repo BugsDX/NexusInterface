@@ -62,7 +62,8 @@ const Characters = styled.span({
     }
     return errors;
   },
-  onSubmit: ({ password }) => Backend.RunCommand('RPC', 'encryptwallet', [password]),
+  onSubmit: ({ password }) =>
+    Backend.RunCommand('RPC', 'encryptwallet', [password]),
   onSubmitSuccess: (result, dispatch, props) => {
     props.reset();
     UIController.openSuccessDialog({
