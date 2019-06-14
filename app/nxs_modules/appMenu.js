@@ -15,6 +15,9 @@ import { clearCoreInfo } from 'actions/coreActionCreators';
 import bootstrap, { checkBootStrapFreeSpace } from 'actions/bootstrap';
 import updater from 'updater';
 
+import UserLock from 'components/User/UserLock';
+import UserUnlock from 'components/User/UserUnlock';
+
 const autoUpdater = remote.getGlobal('autoUpdater');
 
 class AppMenu {
@@ -68,9 +71,15 @@ class AppMenu {
   };
 
   logOut = {
-    label: 'Logout',
+    label: store.getState().tritiumData.userName == '' ? 'Login' : 'Logout',
     click: () => {
-      //logout
+      const loginState =
+        store.getState().tritiumData.userName == '' ? true : false;
+      if (loginState) {
+        UIController.openModal(UserUnlock);
+      } else {
+        UIController.openModal(UserLock);
+      }
     },
   };
 
@@ -379,15 +388,13 @@ class AppMenu {
   };
 
   buildDefaultTemplate = () => {
+    const state = store.getState();
+
     const subMenuFile = {
       label: '&File',
       submenu: [
         this.backupWallet,
         this.viewBackups,
-        this.separator,
-        this.tritiumSwitch,
-        this.logOut,
-        this.separator,
         this.downloadRecent,
         this.separator,
         this.startDaemon,
@@ -396,6 +403,17 @@ class AppMenu {
         this.quitNexus,
       ],
     };
+
+    if (state.settings.tritium) {
+      console.log('########%%%%$%$%$%$%$%%$% YOOOOoo&&&&&&&&@@@##&@&&#&@');
+      subMenuFile.submenu.push(this.separator);
+      subMenuFile.submenu.push(this.tritiumSwitch);
+      subMenuFile.submenu.push(this.logOut);
+      subMenuFile.submenu.push(this.separator);
+    } else {
+      console.log('PPPPPPPPPPPPP____ no tritium');
+    }
+
     const subMenuSettings = {
       label: 'Settings',
       submenu: [
@@ -409,7 +427,7 @@ class AppMenu {
       label: '&View',
       submenu: [this.toggleFullScreen],
     };
-    const state = store.getState();
+
     if (process.env.NODE_ENV === 'development' || state.settings.devMode) {
       subMenuView.submenu.push(this.separator, this.toggleDevTools);
 
@@ -434,7 +452,7 @@ class AppMenu {
 
   build = () => {
     let template;
-
+    console.error('%%%%%%%%%%%%%%%%%%%%%');
     if (process.platform === 'darwin') {
       template = this.buildDarwinTemplate();
     } else {
