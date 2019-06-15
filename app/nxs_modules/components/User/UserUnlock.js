@@ -55,14 +55,10 @@ export default class UserLock extends Component {
 
   launchPinModal() {
     UIController.openModal(PinLoginModal, {
-      callback: payload => this.payload(payload),
+      callback: payload => this.pinCallback(payload),
       params: {
         minting: this.state.mintingEnabled,
         transactions: this.state.transactionsEnabled,
-      },
-      onClose: () => {
-        console.log('&&&&');
-        this.closeModal();
       },
       api: 'users',
       verb: 'unlock',
@@ -71,8 +67,7 @@ export default class UserLock extends Component {
   }
 
   pinCallback(payload) {
-    console.log('$$$$$');
-    console.log(payload);
+    this.closeModal();
   }
 
   switchMinting = e => {

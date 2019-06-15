@@ -81,7 +81,7 @@ export default class UserLock extends Component {
     )
       .then(({ data }) => {
         console.log(data);
-        UIController.showNotification(`Logged Out`, 'success');
+        UIController.showNotification(`Acount Locked`, 'success');
         this.closeModal();
       })
       .catch(error => {

@@ -451,6 +451,12 @@
   "Footer.Exchange": "Exchange",
   "Footer.Trust": "Trust",
   "Footer.List": "List",
+  "Footer.Finance": "Finance",
+  "Footer.Login": "Login",
+  "Footer.Accounts": "User/Accounts",
+  "Footer.Contacts": "Contacts",
+  "Footer.Tokens": "Tokens",
+  "Footer.Assets": "Assets",
 
   "Header.StakeWeight": "Stake Weight",
   "Header.InterestRate": "Stake Reward",

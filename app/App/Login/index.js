@@ -32,6 +32,7 @@ class LoginPage extends Component {
       onClose: () => this.redirectToOverview(),
       onCloseLegacy: () => this.switchTolegacy(),
       onCloseBack: () => this.openLoginModal(),
+      onFinishCreate: () => this.openShowRecovery(),
     });
   }
 
@@ -42,7 +43,8 @@ class LoginPage extends Component {
   openLoginModal() {
     UIController.openModal(LoginComponent, {
       fullScreen: true,
-      onClose: () => this.redirectToOverview(),
+      goBack: () => this.redirectToOverview(),
+      onClose: () => {},
       onCloseCreate: () => this.openCreateAUser(),
       onCloseLegacy: () => this.redirectToOverview(),
       onCloseForgot: () => this.openForgot(),

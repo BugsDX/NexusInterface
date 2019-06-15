@@ -7,6 +7,7 @@ import TextField from 'components/TextField';
 import * as color from 'utils/color';
 import { consts, timing } from 'styles';
 import NexusAddress from 'components/NexusAddress';
+import { listAccounts, listAccountsAll } from 'api/UserApi';
 
 const PanelHolder = styled.div(({ theme }) => ({
   background: color.lighten(theme.background, 0.2),
@@ -74,7 +75,7 @@ class AccountsPanel extends Component {
     this.tempMakeAccounts();
   }
 
-  tempMakeAccounts() {
+  async tempMakeAccounts() {
     const accountstemp = [
       {
         name: 'Default',
@@ -94,37 +95,15 @@ class AccountsPanel extends Component {
           'bf501d4f3d81c31f62038984e923ad01546ff678e305a7cc11b1931742524ce1',
         balance: '8080',
       },
-      {
-        name: 'Savings2',
-        address:
-          'a74774dc075e59d03639b56da8c29736fe248888a43c6103060409dd11273417',
-        token: 'mytoken',
-        tokenaddress:
-          'bf501d4f3d81c31f62038984e923ad01546ff678e305a7cc11b1931742524ce1',
-        balance: '8080',
-      },
-      {
-        name: 'Saving3s',
-        address:
-          'a74774dc075e59d03639b56da8c29736fe248888a43c6103060409dd11273417',
-        token: 'mytoken',
-        tokenaddress:
-          'bf501d4f3d81c31f62038984e923ad01546ff678e305a7cc11b1931742524ce1',
-        balance: '8080',
-      },
-      {
-        name: 'Savings4',
-        address:
-          'a74774dc075e59d03639b56da8c29736fe248888a43c6103060409dd11273417',
-        token: 'mytoken',
-        tokenaddress:
-          'bf501d4f3d81c31f62038984e923ad01546ff678e305a7cc11b1931742524ce1',
-        balance: '8080',
-      },
     ];
 
+    const sadsasad = await listAccounts({
+      username: 'test',
+    });
+    console.log(sadsasad);
+    console.log(accountstemp);
     this.setState({
-      userAccounts: accountstemp,
+      userAccounts: sadsasad,
     });
   }
 
@@ -141,8 +120,8 @@ class AccountsPanel extends Component {
         <AccountBoxLeft>
           <div>{e.name}</div>
           <NXSAddress key={e.address} address={e.address} />
-          <div>{e.token}</div>
-          <NXSAddress key={e.tokenaddress} address={e.tokenaddress} />
+          <div>{e.token_name}</div>
+          <NXSAddress key={e.token} address={e.token} />
         </AccountBoxLeft>
         <AccountBoxRight>{`Balance: ${e.balance}`}</AccountBoxRight>
       </AccountBox>

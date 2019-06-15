@@ -256,6 +256,9 @@ export default class Core {
           // '-connect=node4.nexusoft.io',
           // '-beta',
           `-verbose=4`,
+          '-testnet=42525258',
+          '-private',
+          '-generate=password',
           `-rpcallowip=${this.ip}`,
         ];
         if (settings.forkBlocks) {

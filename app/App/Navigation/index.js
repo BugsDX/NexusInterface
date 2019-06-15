@@ -155,7 +155,7 @@ const Navigation = connect(
           <NavItem icon={logoIcon} to="/Login">
             <Text id="Footer.Login" />
           </NavItem>
-          <NavItem icon={logoIcon} to="/Accounts">
+          <NavItem icon={userIcon} to="/Accounts">
             <Text id="Footer.Accounts" />
           </NavItem>
           <NavItem icon={logoIcon} to="/Assets">
@@ -163,6 +163,9 @@ const Navigation = connect(
           </NavItem>
           <NavItem icon={logoIcon} to="/Contacts">
             <Text id="Footer.Contacts" />
+          </NavItem>
+          <NavItem icon={tokensIcon} to="/Tokens">
+            <Text id="Footer.Tokens" />
           </NavItem>
         </>
       )}

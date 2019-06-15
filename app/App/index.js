@@ -31,6 +31,7 @@ import Login from './Login';
 import Accounts from './Accounts';
 import Assets from './Assets';
 import Contacts from './Contacts';
+import Tokens from './Tokens';
 
 const AppWrapper = styled.div({
   position: 'fixed',
@@ -108,6 +109,7 @@ export default class App extends Component {
                       <Route exact path="/About" component={About} />
                       <Route path="/Modules/:name" component={Modules} />
                       {/*New Tritium Routes*/}
+                      <Route exact path="/Tokens" component={Tokens} />
 
                       <Route exact path="/Login" component={Login} />
                       <Route exact path="/Assets" component={Assets} />

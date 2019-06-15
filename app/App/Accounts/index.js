@@ -15,7 +15,7 @@ const PanelHolder = styled.div({
 
 // React-Redux mandatory methods
 const mapStateToProps = state => {
-  return { ...state.common };
+  return { ...state.common, ...state.tritiumData };
 };
 const mapDispatchToProps = dispatch => ({});
 
@@ -26,7 +26,10 @@ class Accounts extends Component {
       <Panel title={'Accounts'}>
         <div>
           <PanelHolder>
-            <UserPanel />
+            <UserPanel
+              userGen={this.props.userGenesis}
+              userName={this.props.userName}
+            />
             <AccountsPanel />
           </PanelHolder>
         </div>

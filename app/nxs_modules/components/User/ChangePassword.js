@@ -55,18 +55,19 @@ export default class ChangePassword extends Component {
     console.log(this.state);
 
     UIController.openModal(PinLoginModal, {
-      callback: payload => this.payload(payload),
+      callback: payload => this.pinCallback(payload),
       params: {
         ...this.state,
-      },
-      onClose: () => {
-        console.log('&&&&');
-        this.closeModal();
       },
       api: 'users',
       verb: 'unlock',
       noun: 'user',
     });
+  };
+
+  pinCallback = payload => {
+    console.log(payload);
+    this.closeModal();
   };
 
   setOldPass = e => {
