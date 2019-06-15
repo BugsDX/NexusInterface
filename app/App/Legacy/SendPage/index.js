@@ -25,6 +25,7 @@ import swapIcon from 'images/swap.sprite.svg';
 const mapStateToProps = state => ({
   connections: state.core.info.connections,
   isInSync: state.common.isInSync,
+  tritium: state.settings.tritium,
 });
 
 /**
@@ -79,7 +80,8 @@ class SendPage extends Component {
         icon={sendIcon}
         title={<Text id="sendReceive.SendNexus" />}
         controls={
-          this.props.connections !== undefined && (
+          this.props.connections !== undefined &&
+          !this.props.tritium && (
             <Tooltip.Trigger
               tooltip={<Text id="sendReceive.MoveNxsBetweenAccount" />}
             >

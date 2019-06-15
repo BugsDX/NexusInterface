@@ -12,6 +12,26 @@ export const getAccountOptions = memoize(myAccounts => {
   return [];
 });
 
+export const getTritiumAccountOptions = memoize(myAccounts => {
+  if (myAccounts) {
+    return myAccounts.map(acc => {
+      if (acc.error) {
+        return {
+          value: acc.error,
+          display: `${acc.error}`,
+        };
+      } else {
+        return {
+          value: acc.name,
+          isToken: acc.token_name !== 'NXS',
+          display: `${acc.name} (${acc.balance} ${acc.token_name})`,
+        };
+      }
+    });
+  }
+  return [];
+});
+
 export const getNxsFiatPrice = memoize((rawNXSvalues, fiatCurrency) => {
   if (rawNXSvalues) {
     const marketInfo = rawNXSvalues.find(e => e.name === fiatCurrency);
