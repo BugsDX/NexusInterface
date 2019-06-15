@@ -31,7 +31,6 @@ import Login from './Login';
 import Accounts from './Accounts';
 import Assets from './Assets';
 import Contacts from './Contacts';
-import Finance from './Finance';
 import Tokens from './Tokens';
 import Names from './Names';
 
@@ -111,8 +110,8 @@ export default class App extends Component {
                       <Route exact path="/About" component={About} />
                       <Route path="/Modules/:name" component={Modules} />
                       {/*New Tritium Routes*/}
-                      <Route exact path="/Finance" component={Finance} />
                       <Route exact path="/Tokens" component={Tokens} />
+
                       <Route exact path="/Login" component={Login} />
                       <Route exact path="/Assets" component={Assets} />
                       <Route exact path="/Contacts" component={Contacts} />

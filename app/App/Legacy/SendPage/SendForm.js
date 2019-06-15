@@ -18,6 +18,9 @@ import UIController from 'components/UIController';
 import Link from 'components/Link';
 import { rpcErrorHandler } from 'utils/form';
 import sendIcon from 'images/send.sprite.svg';
+import TritiumAmountField from './TritiumAmountField';
+import { LoadTritiumAccounts } from 'actions/financeActionCreators';
+import PinLoginModal from 'components/User/PinLoginModal';
 
 // Internal Local
 import Recipients from './Recipients';
@@ -25,6 +28,7 @@ import {
   getAccountOptions,
   getAddressNameMap,
   getRegisteredFieldNames,
+  getTritiumAccountOptions,
 } from './selectors';
 
 const SendFormComponent = styled.form({
@@ -41,13 +45,16 @@ const SendFormButtons = styled.div({
 const mapStateToProps = ({
   addressBook,
   myAccounts,
-  settings: { minConfirmations },
+  tritiumData: { tritiumAccounts },
+  settings: { minConfirmations, tritium },
   common: { encrypted, loggedIn },
   form,
 }) => ({
   minConfirmations,
+  tritium,
   encrypted,
   loggedIn,
+  tritiumAccountOptions: getTritiumAccountOptions(tritiumAccounts),
   accountOptions: getAccountOptions(myAccounts),
   addressNameMap: getAddressNameMap(addressBook),
   fieldNames: getRegisteredFieldNames(
@@ -57,6 +64,7 @@ const mapStateToProps = ({
 
 const mapDispatchToProps = dispatch => ({
   loadMyAccounts: () => dispatch(loadMyAccounts()),
+  loadMyTritiumAccounts: () => dispatch(LoadTritiumAccounts()),
 });
 
 /**
@@ -74,6 +82,7 @@ const mapDispatchToProps = dispatch => ({
   destroyOnUnmount: false,
   initialValues: {
     sendFrom: null,
+    tritiumRecipiant: { name: null, amount: '' },
     recipients: [
       {
         address: null,
@@ -83,13 +92,36 @@ const mapDispatchToProps = dispatch => ({
     ],
     message: '',
   },
-  validate: ({ sendFrom, recipients }) => {
+  validate: ({ sendFrom, recipients, tritiumRecipiant }, props) => {
     const errors = {};
     if (!sendFrom) {
       errors.sendFrom = <Text id="sendReceive.Messages.NoAccounts" />;
     }
+    if (props.tritium) {
+      if (!tritiumRecipiant) {
+        errors.recipients = {
+          _error: <Text id="sendReceive.Messages.NoRecipient" />,
+        };
+      } else {
+        const recipientsErrors = [];
 
-    if (!recipients || !recipients.length) {
+        const tritiumRecipiantErrors = {};
+        if (!tritiumRecipiant.name) {
+          tritiumRecipiantErrors.name = <Text id="Alert.AddressEmpty" />;
+        }
+        const floatAmount = parseFloat(tritiumRecipiant.amount);
+        if (!floatAmount || floatAmount < 0) {
+          tritiumRecipiantErrors.amount = <Text id="Alert.InvalidAmount" />;
+        }
+        if (Object.keys(tritiumRecipiantErrors).length) {
+          recipientsErrors[0] = tritiumRecipiantErrors;
+        }
+
+        if (recipientsErrors.length) {
+          errors.tritiumRecipiant = tritiumRecipiantErrors;
+        }
+      }
+    } else if (!recipients || !recipients.length) {
       errors.recipients = {
         _error: <Text id="sendReceive.Messages.NoRecipient" />,
       };
@@ -118,76 +150,136 @@ const mapDispatchToProps = dispatch => ({
     return errors;
   },
   asyncBlurFields: ['recipients[].address'],
-  asyncValidate: async ({ recipients }) => {
+  asyncValidate: async (
+    { recipients, tritiumRecipiant, sendFrom },
+    dispatch,
+    props
+  ) => {
     const recipientsErrors = [];
-    await Promise.all(
-      recipients.map(({ address }, i) =>
-        Backend.RunCommand('RPC', 'validateaddress', [address])
-          .then(result => {
-            if (!result.isvalid) {
+
+    if (props.tritium) {
+      let sendFromDetails = props.tritiumAccountOptions.filter(
+        acct => acct.value === sendFrom
+      )[0];
+
+      let paramsObj = { amount: tritiumRecipiant.amount, name: sendFrom };
+      if (tritiumRecipiant.name.includes(':')) {
+        paramsObj.name_to = tritiumRecipiant.name;
+      } else {
+        paramsObj.address_to = tritiumRecipiant.name;
+      }
+
+      if (sendFromDetails.isToken) {
+        UIController.openModal(PinLoginModal, {
+          api: 'tokens',
+          verb: 'debit',
+          noun: 'account',
+          callback: payload => console.log(payload),
+          params: paramsObj,
+        });
+      } else {
+        let awaitPinEntryAndApiCall = await new Promise((resolve, reject) => {
+          UIController.openModal(PinLoginModal, {
+            api: 'finance',
+            verb: 'debit',
+            noun: 'account',
+            callback: payload => {
+              if (payload.data.error) {
+                reject(payload);
+              } else {
+                resolve(payload);
+              }
+            },
+            params: paramsObj,
+          });
+        });
+        if (awaitPinEntryAndApiCall.status !== 200) {
+          throw { error: awaitPinEntryAndApiCall.data.error };
+        }
+      }
+    } else {
+      await Promise.all(
+        recipients.map(({ address }, i) =>
+          Backend.RunCommand('RPC', 'validateaddress', [address])
+            .then(result => {
+              if (!result.isvalid) {
+                recipientsErrors[i] = {
+                  address: <Text id="Alert.InvalidAddress" />,
+                };
+              } else if (result.ismine) {
+                recipientsErrors[i] = {
+                  address: <Text id="Alert.registeredToThis" />,
+                };
+              }
+            })
+            .catch(err => {
               recipientsErrors[i] = {
                 address: <Text id="Alert.InvalidAddress" />,
               };
-            } else if (result.ismine) {
-              recipientsErrors[i] = {
-                address: <Text id="Alert.registeredToThis" />,
-              };
-            }
-          })
-          .catch(err => {
-            recipientsErrors[i] = {
-              address: <Text id="Alert.InvalidAddress" />,
-            };
-          })
-      )
-    );
-    if (recipientsErrors.length) {
-      throw { recipients: recipientsErrors };
+            })
+        )
+      );
+      if (recipientsErrors.length) {
+        throw { recipients: recipientsErrors };
+      }
     }
     return null;
   },
-  onSubmit: ({ sendFrom, recipients, message }, dispatch, props) => {
+  onSubmit: (
+    { sendFrom, recipients, message, tritiumRecipiant },
+    dispatch,
+    props
+  ) => {
     let minConfirmations = parseInt(props.minConfirmations);
     if (isNaN(minConfirmations)) {
       minConfirmations = defaultSettings.minConfirmations;
     }
 
-    if (recipients.length === 1) {
-      const recipient = recipients[0];
-      const params = [
-        sendFrom,
-        recipient.address,
-        parseFloat(recipient.amount),
-        minConfirmations,
-      ];
-      if (message) params.push(message);
-      return Backend.RunCommand('RPC', 'sendfrom', params);
-    } else {
-      const queue = recipients.reduce(
-        (queue, r) => ({ ...queue, [r.address]: parseFloat(r.amount) }),
-        {}
-      );
-      return Backend.RunCommand(
-        'RPC',
-        'sendmany',
-        [sendFrom, queue],
-        minConfirmations,
-        message
-      );
+    if (!props.tritium) {
+      if (recipients.length === 1) {
+        const recipient = recipients[0];
+        const params = [
+          sendFrom,
+          recipient.address,
+          parseFloat(recipient.amount),
+          minConfirmations,
+        ];
+        if (message) params.push(message);
+        return Backend.RunCommand('RPC', 'sendfrom', params);
+      } else {
+        const queue = recipients.reduce(
+          (queue, r) => ({ ...queue, [r.address]: parseFloat(r.amount) }),
+          {}
+        );
+
+        return Backend.RunCommand(
+          'RPC',
+          'sendmany',
+          [sendFrom, queue],
+          minConfirmations,
+          message
+        );
+      }
     }
   },
   onSubmitSuccess: (result, dispatch, props) => {
     props.reset();
     props.loadMyAccounts();
-    UIController.openSuccessDialog({
-      message: <Text id="Alert.Sent" />,
-    });
+    props.loadMyTritiumAccounts();
+    if (!props.tritium) {
+      UIController.openSuccessDialog({
+        message: <Text id="Alert.Sent" />,
+      });
+    }
   },
   onSubmitFail: rpcErrorHandler(
     <Text id="sendReceive.Messages.ErrorSending" />
   ),
 })
 class SendForm extends Component {
+  componentDidMount() {
+    this.props.loadMyTritiumAccounts();
+  }
   /**
    * Confirm the Send
    *
@@ -204,7 +296,6 @@ class SendForm extends Component {
       fieldNames,
     } = this.props;
 
-    console.log(this.props.fieldNames);
     if (invalid) {
       // Mark the form touched so that the validation errors will be shown.
       // redux-form doesn't have the `touchAll` feature yet so we have to list all fields manually.
@@ -274,7 +365,16 @@ class SendForm extends Component {
    * @memberof SendForm
    */
   render() {
-    const { accountOptions, change } = this.props;
+    const {
+      accountOptions,
+      tritiumAccountOptions,
+      change,
+      tritium,
+    } = this.props;
+    let displayOptions = accountOptions;
+    if (tritium) {
+      displayOptions = tritiumAccountOptions;
+    }
 
     return (
       <SendFormComponent onSubmit={this.confirmSend}>
@@ -283,36 +383,57 @@ class SendForm extends Component {
             component={Select.RF}
             name="sendFrom"
             placeholder={<Text id="sendReceive.SelectAnAccount" />}
-            options={accountOptions}
+            options={displayOptions}
           />
         </FormField>
 
-        <FieldArray
-          component={Recipients}
-          name="recipients"
-          change={change}
-          addRecipient={this.addRecipient}
-        />
-
-        <Text id="sendReceive.EnterYourMessage">
-          {placeholder => (
-            <FormField connectLabel label={<Text id="sendReceive.Message" />}>
+        {tritium ? (
+          <>
+            <FormField label={<Text id="Finance.Recipiant" />}>
               <Field
                 component={TextField.RF}
-                name="message"
-                multiline
-                rows={1}
-                placeholder={placeholder}
+                name="tritiumRecipiant.name"
+                change={change}
+                placeholder="Name:Account"
               />
             </FormField>
-          )}
-        </Text>
+            <TritiumAmountField change={change} />
+          </>
+        ) : (
+          <>
+            <FieldArray
+              component={Recipients}
+              name="recipients"
+              change={change}
+              addRecipient={this.addRecipient}
+            />
+
+            <Text id="sendReceive.EnterYourMessage">
+              {placeholder => (
+                <FormField
+                  connectLabel
+                  label={<Text id="sendReceive.Message" />}
+                >
+                  <Field
+                    component={TextField.RF}
+                    name="message"
+                    multiline
+                    rows={1}
+                    placeholder={placeholder}
+                  />
+                </FormField>
+              )}
+            </Text>
+          </>
+        )}
 
         <SendFormButtons>
-          <FieldArray
-            component={this.renderAddRecipientButton}
-            name="recipients"
-          />
+          {!tritium && (
+            <FieldArray
+              component={this.renderAddRecipientButton}
+              name="recipients"
+            />
+          )}
 
           <Button type="submit" skin="primary">
             <Icon icon={sendIcon} className="space-right" />

@@ -122,33 +122,36 @@ class Recipients extends React.Component {
     } else {
       return (
         <>
-          {fields.map((fieldName, i) => (
-            <Recipient key={i}>
-              <Tooltip.Trigger
-                tooltip={<Text id="sendReceive.RemoveRecipient" />}
-              >
-                <RemoveButton
-                  onClick={() => {
-                    fields.remove(i);
-                  }}
+          {fields.map((fieldName, i) => {
+            console.log('TCL: Recipients -> render -> fieldName', fieldName);
+            return (
+              <Recipient key={i}>
+                <Tooltip.Trigger
+                  tooltip={<Text id="sendReceive.RemoveRecipient" />}
                 >
-                  ✕
-                </RemoveButton>
-              </Tooltip.Trigger>
+                  <RemoveButton
+                    onClick={() => {
+                      fields.remove(i);
+                    }}
+                  >
+                    ✕
+                  </RemoveButton>
+                </Tooltip.Trigger>
 
-              <AddressWrapper>
-                <Field
-                  name={`${fieldName}.address`}
-                  component={RecipientField}
-                  change={change}
-                />
-              </AddressWrapper>
+                <AddressWrapper>
+                  <Field
+                    name={`${fieldName}.address`}
+                    component={RecipientField}
+                    change={change}
+                  />
+                </AddressWrapper>
 
-              <AmountWrapper>
-                <AmountField parentFieldName={fieldName} change={change} />
-              </AmountWrapper>
-            </Recipient>
-          ))}
+                <AmountWrapper>
+                  <AmountField parentFieldName={fieldName} change={change} />
+                </AmountWrapper>
+              </Recipient>
+            );
+          })}
 
           <MoreInfo>
             <Button skin="hyperlink" onClick={addRecipient}>

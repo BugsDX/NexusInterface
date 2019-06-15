@@ -5,11 +5,15 @@ export const LoadTritiumAccounts = () => dispatch => {
   Backend.RunCommand(
     'API',
     {
-      api: 'finance',
+      api: 'users',
       verb: 'list',
       noun: 'accounts',
     },
-    []
+    [
+      {
+        username: 'nexustest',
+      },
+    ]
   )
     .then(({ data }) => {
       console.log(data);

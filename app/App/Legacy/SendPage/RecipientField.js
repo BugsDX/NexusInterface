@@ -75,7 +75,7 @@ class RecipientField extends Component {
   render() {
     const { addressNameMap, input, meta, locale, suggestions } = this.props;
     const recipientName = addressNameMap[input.value];
-
+    console.log(this.props);
     return (
       <FormField
         label={

@@ -9,6 +9,8 @@ import Text from '../Text';
 import * as Backend from 'scripts/backend-com';
 import UIController from 'components/UIController';
 
+const floatRegex = /^[0-9]+(.[0-9]*)?$/;
+
 const Container = styled.div(({ theme }) => ({
   margin: '1em',
   display: 'flex',
@@ -56,7 +58,7 @@ export default class PinLogin extends Component {
       [{ pin: this.state.value, ...params }]
     )
       .then(({ data }) => {
-        callback(data);
+        if (callback) callback(data);
         this.closeModal();
       })
       .catch(error => {
@@ -95,11 +97,14 @@ export default class PinLogin extends Component {
             <Text id="Pin.Title" />
           </h2>
           <TextField
-            type="password"
+            // type="password"
             inputRef={input => {
               this.Input = input;
             }}
-            onChange={e => this.setState({ value: e.target.value })}
+            onChange={e => {
+              this.setState({ value: e.target.value });
+            }}
+            value={this.state.value}
             onKeyUp={e => {
               if (e.key === 'Enter' && !this.state.disable) {
                 this.handleOnEnter();

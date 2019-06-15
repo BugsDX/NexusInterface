@@ -24,11 +24,11 @@ import transactionsIcon from 'images/transaction.sprite.svg';
 import addressBookIcon from 'images/address-book.sprite.svg';
 import settingsIcon from 'images/settings.sprite.svg';
 import consoleIcon from 'images/console.sprite.svg';
-import FinanceIcon from 'images/nxs-staking.sprite.svg';
 import userIcon from 'images/user.sprite.svg';
 import tokensIcon from 'images/nxs-staking.sprite.svg';
 // import shapeshiftIcon from 'images/shapeshift.sprite.svg';
 // import trustListIcon from 'images/trust-list.sprite.svg';
+//
 
 const slideUp = keyframes`
   from { opacity: 0; transform: translateY(70%) }
@@ -155,9 +155,6 @@ const Navigation = connect(
 
       {settings.tritium && (
         <>
-          <NavItem icon={FinanceIcon} to="/Finance">
-            <Text id="Footer.Finance" />
-          </NavItem>
           <NavItem icon={logoIcon} to="/Login">
             <Text id="Footer.Login" />
           </NavItem>
