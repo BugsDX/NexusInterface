@@ -170,6 +170,9 @@ const Navigation = connect(
           <NavItem icon={tokensIcon} to="/Tokens">
             <Text id="Footer.Tokens" />
           </NavItem>
+          <NavItem icon={logoIcon} to="/Names">
+            <Text id="Footer.Names" />
+          </NavItem>
         </>
       )}
 

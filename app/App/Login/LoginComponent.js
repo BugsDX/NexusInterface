@@ -18,6 +18,8 @@ import * as Backend from 'scripts/backend-com';
 import UIController from 'components/UIController';
 import * as TYPE from 'actions/actiontypes';
 
+import updater from 'updater';
+
 const LoginModalComponent = styled(Modal)({
   padding: '1px',
 });
@@ -27,10 +29,12 @@ const LoginFieldSet = styled(FieldSet)({
   margin: '0 auto',
 });
 
+var ldldldl = false;
+
 @connect(
   null,
   dispatch => ({
-    turnOnTritium: () => dispatch(updateSettings({ tritium: true })),
+    turnOnTritium: onOff => dispatch(updateSettings({ tritium: onOff })),
     tempTurnOffLogIn: () => dispatch({ type: 'TEMP_LOG_IN', payload: true }),
     setUserGenesis: returnData => {
       dispatch({ type: TYPE.TRITIUM_SET_USER_GENESIS, payload: returnData });
@@ -59,6 +63,13 @@ class LoginComponent extends React.Component {
 
   onSubmit = (values, _, props) => {
     console.log(props);
+  };
+
+  askdkdkdk = () => {
+    updater.rebuildMenu();
+    console.log(ldldldl);
+    this.props.turnOnTritium(ldldldl);
+    ldldldl = !ldldldl;
   };
 
   render() {
@@ -125,6 +136,14 @@ class LoginComponent extends React.Component {
               >
                 Test Close Go To Overview
               </Button>
+              <Button
+                wide
+                skin="primary"
+                onClick={this.askdkdkdk}
+                style={{ fontSize: 17, padding: '5px' }}
+              >
+                Test toggle tritium switch
+              </Button>
             </div>
           </Panel>
         </Modal.Body>
@@ -176,7 +195,9 @@ export default LoginComponent;
     props.setUserName(props.values.username);
     UIController.showNotification(<Text id="Settings.LoggedIn" />, 'success');
     console.log('PASS');
-    props.turnOnTritium();
+
+    updater.rebuildMenu();
+    props.turnOnTritium(true);
     props.closeModal();
   },
   onSubmitFail: (errors, dispatch, submitError) => {

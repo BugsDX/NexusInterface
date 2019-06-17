@@ -29,6 +29,13 @@ class Updater extends EventEmitter {
     this._autoUpdater.on('update-downloaded', () => {
       this._updateState('downloaded');
     });
+    ///Im trying to dynamicly change the menu when you go in and out of tritium mode
+    this._autoUpdater.on('rebuildMenu', () => {
+      this._updateState('checking');
+      setTimeout(() => {
+        this._updateState('idle');
+      }, 250);
+    });
   }
 
   get state() {
@@ -98,6 +105,10 @@ class Updater extends EventEmitter {
       this._state = newState;
       this.emit('state-change', newState);
     }
+  };
+
+  rebuildMenu = () => {
+    this.autoUpdater.emit('rebuildMenu', null);
   };
 }
 

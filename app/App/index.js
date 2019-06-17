@@ -32,6 +32,7 @@ import Accounts from './Accounts';
 import Assets from './Assets';
 import Contacts from './Contacts';
 import Tokens from './Tokens';
+import Names from './Names';
 
 const AppWrapper = styled.div({
   position: 'fixed',
@@ -115,6 +116,7 @@ export default class App extends Component {
                       <Route exact path="/Assets" component={Assets} />
                       <Route exact path="/Contacts" component={Contacts} />
                       <Route exact path="/Accounts" component={Accounts} />
+                      <Route exact path="/Names" component={Names} />
                     </Switch>
                   </Main>
                   <Navigation />
