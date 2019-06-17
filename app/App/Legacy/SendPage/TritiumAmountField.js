@@ -39,7 +39,7 @@ class TritiumAmountField extends Component {
             connectLabel
             label={
               <span className="v-align">
-                <Text id="sendReceive.Amount" />
+                <Text id="sendReceive.TableAmount" />
               </span>
             }
           >

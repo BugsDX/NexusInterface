@@ -586,6 +586,7 @@
   "Finance.Credit": "Credit To",
   "Finance.NoLogin": "You need to log in to your wallet before creating Debits/Credits",
   "Finance.Recipiant": "Recipiant",
+  "Finance.Namespace": "Namespace",
 
   "Pin.Enter": "Enter",
   "Pin.Title": "Enter Pin"

@@ -8,6 +8,7 @@ import Button from '../Button';
 import Text from '../Text';
 import * as Backend from 'scripts/backend-com';
 import UIController from 'components/UIController';
+import { Promise } from 'q';
 
 const floatRegex = /^[0-9]+(.[0-9]*)?$/;
 
@@ -131,4 +132,22 @@ export default class PinLogin extends Component {
       </SmallModal>
     );
   }
+}
+
+export function PinPromise(api, verb, noun, params) {
+  return new Promise((resolve, reject) => {
+    UIController.openModal(PinLogin, {
+      api: api,
+      verb: verb,
+      noun: noun,
+      callback: payload => {
+        if (payload.data.error) {
+          reject(payload);
+        } else {
+          resolve(payload);
+        }
+      },
+      params: params,
+    });
+  });
 }

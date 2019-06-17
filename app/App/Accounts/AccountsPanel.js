@@ -108,9 +108,11 @@ class AccountsPanel extends Component {
   }
 
   returnBoxes() {
-    return this.state.userAccounts.map(e => {
-      return this.makeBox(e);
-    });
+    if (this.state.userAccounts) {
+      return this.state.userAccounts.map(e => {
+        return this.makeBox(e);
+      });
+    }
   }
 
   makeBox(e) {

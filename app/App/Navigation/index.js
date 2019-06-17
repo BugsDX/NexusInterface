@@ -28,7 +28,6 @@ import userIcon from 'images/user.sprite.svg';
 import tokensIcon from 'images/nxs-staking.sprite.svg';
 // import shapeshiftIcon from 'images/shapeshift.sprite.svg';
 // import trustListIcon from 'images/trust-list.sprite.svg';
-//
 
 const slideUp = keyframes`
   from { opacity: 0; transform: translateY(70%) }

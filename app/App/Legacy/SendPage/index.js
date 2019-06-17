@@ -21,6 +21,7 @@ import SendForm from './SendForm';
 // Resources
 import sendIcon from 'images/send.sprite.svg';
 import swapIcon from 'images/swap.sprite.svg';
+import TritiumSendForm from './TritiumSendForm';
 
 const mapStateToProps = state => ({
   connections: state.core.info.connections,
@@ -104,7 +105,7 @@ class SendPage extends Component {
           </WaitingMessage>
         ) : (
           <div>
-            <SendForm />
+            {this.props.tritium ? <TritiumSendForm /> : <SendForm />}
 
             {this.props.Queue && !!Object.keys(this.props.Queue).length && (
               <Queue
