@@ -1,113 +1,122 @@
-// External Dependencies
+// External
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { remote } from 'electron';
+import Text from 'components/Text';
 import styled from '@emotion/styled';
+import googleanalytics from 'scripts/googleanalytics';
 
-// Internal
-import TextField from 'components/TextField';
-import Panel from 'components/Panel';
+// Internal Global
+import Icon from 'components/Icon';
 import Button from 'components/Button';
-import * as color from 'utils/color';
+import Panel from 'components/Panel';
+import UIController from 'components/UIController';
+import AddEditContactModal from 'components/AddEditContactModal';
+import ContextMenuBuilder from 'contextmenu';
+import * as Backend from 'scripts/backend-com';
+import { listNames, listAccountsAll } from 'api/UserApi';
 
-import UnnamedASD from './hhh';
+// Internal Local
+import NamesBookList from './NamesBookList';
+import NamesBookDetails from './NamesBookDetails';
 
-// React-Redux mandatory methods
-const mapStateToProps = state => {
-  return { ...state.common };
-};
-const mapDispatchToProps = dispatch => ({});
+// Icons
+import addressBookIcon from 'images/address-book.sprite.svg';
+import addContactIcon from 'images/add-contact.sprite.svg';
 
-const SearchName = styled.div(({ theme }) => ({
-  background: color.lighten(theme.background, 0.4),
-  display: 'flex',
-
-  border: `1.5px solid ${theme.primary}`,
-  borderRadius: '2px',
-}));
-
-const SearchInputLabel = styled.a(({ theme }) => ({
-  color: theme.primary,
-  fontWeight: 'bold',
-  fontSize: '125%',
-}));
-
-const NamesContent = styled.div({
+const AddressBookLayout = styled.div({
+  display: 'grid',
+  gridTemplateAreas: '"list details"',
+  gridTemplateColumns: '1fr 2fr',
+  columnGap: 30,
   height: '100%',
-  background: 'orange',
 });
 
-const PanelContent = styled(Panel)({
-  border: '1px',
+const mapStateToProps = state => ({
+  addressBook: state.addressBook,
+  connections: state.core.info.connections,
 });
 
-class Names extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      searchInput: '',
-      executedSearch: false,
-      searchType: '',
-    };
+/**
+ * The Address Book Page
+ *
+ * @class AddressBook
+ * @extends {Component}
+ */
+@connect(mapStateToProps)
+class NamesBook extends Component {
+  state = {
+    activeIndex: 0,
+  };
+
+  /**
+   * componentDidMount
+   *
+   * @memberof AddressBook
+   */
+  componentDidMount() {
+    window.addEventListener('contextmenu', this.setupcontextmenu, false);
+    googleanalytics.SendScreen('AddressBook');
+    this.getTest();
   }
 
-  searchInputHandle = e => {
-    this.setState({
-      searchInput: e.target.value,
+  async getTest() {
+    const sadsasad = await listNames({
+      username: 'test',
     });
+    console.log(sadsasad);
+  }
+
+  /**
+   * componentWillUnmount
+   *
+   * @memberof AddressBook
+   */
+  componentWillUnmount() {
+    window.removeEventListener('contextmenu', this.setupcontextmenu);
+  }
+
+  /**
+   * Set up the context menu
+   *
+   * @param {*} e
+   * @memberof SendPage
+   */
+  setupcontextmenu(e) {
+    e.preventDefault();
+    const contextmenu = new ContextMenuBuilder().defaultContext;
+    //build default
+    let defaultcontextmenu = remote.Menu.buildFromTemplate(contextmenu);
+    defaultcontextmenu.popup(remote.getCurrentWindow());
+  }
+
+  /**
+   *
+   *
+   * @memberof AddressBook
+   */
+  showAddContact = () => {
+    UIController.openModal(AddEditContactModal);
   };
 
-  searchButtonExecute = e => {
-    if (this.state.searchInput.includes('.')) {
-      console.log('Name');
-      this.setState({
-        searchType: 'Name',
-      });
-    } else {
-      console.log('NameSpace');
-      this.setState({
-        searchType: 'NameSpace',
-      });
-    }
-    this.setState({
-      executedSearch: true,
-    });
-  };
-
-  // Mandatory React method
+  /**
+   * render
+   *
+   * @returns
+   * @memberof AddressBook
+   */
   render() {
-    const { searchInput, executedSearch, searchType } = this.state;
+    //const { addressBook, connections } = this.props;
+
     return (
-      <PanelContent title={'Names'}>
-        <SearchName>
-          <SearchInputLabel>{'Nexus://'}</SearchInputLabel>
-          <TextField
-            style={{ width: '100%' }}
-            value={searchInput}
-            onChange={this.searchInputHandle}
-          />
-          <Button
-            style={{ paddingBottom: '0.5em' }}
-            skin="primary"
-            onClick={this.searchButtonExecute}
-          >
-            {'Go'}
-          </Button>
-        </SearchName>
-        {executedSearch ? (
-          <NamesContent>
-            {searchType}
-            <UnnamedASD />
-          </NamesContent>
-        ) : (
-          <div>{'Nothing'}</div>
-        )}
-      </PanelContent>
+      <Panel icon={addressBookIcon} title={'Names Book'} bodyScrollable={false}>
+        <AddressBookLayout>
+          <NamesBookList />
+          <NamesBookDetails />
+        </AddressBookLayout>
+      </Panel>
     );
   }
 }
 
-// Mandatory React-Redux method
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Names);
+export default NamesBook;
