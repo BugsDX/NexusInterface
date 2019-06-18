@@ -76,32 +76,10 @@ class AccountsPanel extends Component {
   }
 
   async tempMakeAccounts() {
-    const accountstemp = [
-      {
-        name: 'Default',
-        address:
-          'a74774dc075e59d03639b56da8c29736fe248888a43c6103060409dd11273417',
-        token: 'NXS',
-        tokenaddress:
-          'bf501d4f3d81c31f62038984e923ad01546ff678e305a7cc11b1931742524ce1',
-        balance: '99999',
-      },
-      {
-        name: 'Savings',
-        address:
-          'a74774dc075e59d03639b56da8c29736fe248888a43c6103060409dd11273417',
-        token: 'mytoken',
-        tokenaddress:
-          'bf501d4f3d81c31f62038984e923ad01546ff678e305a7cc11b1931742524ce1',
-        balance: '8080',
-      },
-    ];
-
     const sadsasad = await listAccounts({
       username: 'test',
     });
     console.log(sadsasad);
-    console.log(accountstemp);
     this.setState({
       userAccounts: sadsasad,
     });
