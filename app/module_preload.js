@@ -11,6 +11,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import * as ReactRouterDOM from 'react-router-dom';
+import * as connectedReactRouter from 'connected-react-router';
 import * as Redux from 'redux';
 import * as ReactRedux from 'react-redux';
 import * as connectedReactRouter from 'connected-react-router';
@@ -50,6 +51,7 @@ global.NEXUS = {
     ReactRedux,
     emotion: { core, styled, theming, createCache },
     victory,
+    connectedReactRouter,
   },
   utilities: {
     color,
