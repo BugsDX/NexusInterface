@@ -239,7 +239,39 @@ export function listNames({
   page = 0,
   limit = 100,
 }) {
-  checkInput({ genesis, username, page, limit });
+  return new Promise(resolve => {
+    checkInput({ genesis, username, page, limit });
+    let inputs = {
+      genesis: genesis,
+      username: username,
+      page: page,
+      limit: limit,
+    };
+
+    if (genesis === null) delete inputs.genesis;
+
+    if (username === null) delete inputs.username;
+
+    console.log(inputs);
+    resolve(
+      Backend.RunCommand(
+        'api',
+        {
+          api: 'users',
+          verb: 'list',
+          noun: 'names',
+        },
+        inputs
+      )
+        .then(({ data }) => {
+          console.log(data);
+          return data.result;
+        })
+        .catch(error => {
+          catchError(error);
+        })
+    );
+  });
 }
 
 export function listNamesAll({
