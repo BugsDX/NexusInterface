@@ -7,6 +7,7 @@ import styled from '@emotion/styled';
 import UIController from 'components/UIController';
 import AddEditContactModal from 'components/AddEditContactModal';
 import Button from 'components/Button';
+import CreateName from './CreateName';
 
 const ContactListComponent = styled.div(({ theme }) => ({
   gridArea: 'list',
@@ -46,9 +47,9 @@ const mapStateToProps = ({
  */
 @connect(mapStateToProps)
 class ContactList extends React.Component {
-  createContact = () => {
+  createName = () => {
     console.log('click');
-    UIController.openModal(AddEditContactModal);
+    UIController.openModal(CreateName);
   };
 
   /**
@@ -70,7 +71,7 @@ class ContactList extends React.Component {
         {connections !== undefined && (
           <>
             <Separator />
-            <Button>{'New Name'}</Button>
+            <Button onClick={this.createName}>{'New Name'}</Button>
           </>
         )}
       </ContactListComponent>
