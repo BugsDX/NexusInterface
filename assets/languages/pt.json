@@ -1,5 +1,5 @@
 {
-  "overview.TrustWeight": "Trust Weight",
+  "overview.TrustWeight": "Peso de Confiança",
   "overview.LicensceAgreement": "Contrato de Licença",
   "overview.BlockWeight": "Peso do Bloco",
   "overview.PrimeDiff": "Dificuldade Prime",
@@ -282,7 +282,7 @@
   "Settings.RescanningDone": "Procura concluida",
   "Settings.Import": "Importar",
   "Settings.LoggedIn": "Conectado com sucesso",
-  "Settings.SetFeeButton": "Def.",
+  "Settings.SetFeeButton": "Defenir",
   "Configurações.Procurar": "Navegar",
   "Settings.DarkTheme": "Escuro",
   "Settings.LightTheme": "Claro",
